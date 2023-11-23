@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="/cardapio">voltar</a>
+    <main>
+        <div id="cart">
+            <h2>CARRINHO</h2>
+            <ul style="list-style:none">
+                <% if(prod.msg){%>
+                    <li><p><%= prod.msg %></p></li>
+                    <%}else{%>
+
+                <% for(let i=0;i<pedido.length;i++){%>               
+                <% for(let j=0;j<prod.length;j++){%>       
+                    <li id="info_prod">
+                        <p><%= prod[j].descr %></p>
+                        <p>R$<%= prod[j].preco %></p><br>
+                        <div>
+                        <form action="/editar_quant" method="post">
+                            <p><%= pedido[i].quantidade %></p>
+                            <input type="hidden" value="<%= pedido[i].id %>">  
+                            <input type="number" style="width: 20px;" name="quant">                          
+                            <button type="submit" >Alterar quantidade</button>
+                        </form>                            
+                        </div>
+                    </li>
+                    <% } %>
+                    <% } %>
+                    <% } %>
+            </ul>
+            <div>
+                <p>valor total | quantidade de items</p>
+            </div>
+            <form action="/finalizar">
+                <input type="hidden" value="sessao_pedido">
+                <button type="submit">FINALIZAR</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

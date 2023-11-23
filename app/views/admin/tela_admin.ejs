@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>tela admin</h1>
+    <a href="/page_usuario">user</a>
+</header>
+<main>
+    <section>
+        <div id="informacoes">
+            <div id="t_user">
+                <% if(usuario.msg){ %>
+                <p><%= usuario.msg %></p>
+                <% }else{ %>
+                <table>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Função</th>
+                        <th></th>
+                    </tr>
+                    <% for(let i=0;i<usuario.length;i++){%>
+                    <tr id="info_user">
+                        <th><%= usuario[i].nome %></th>
+                        <th><%= usuario[i].email %></th>
+                        <th><%= usuario[i].descr %></th>
+                        <th>
+                            <form action="/editar_user" method="post">
+                                <button type="submit" >ED</button>
+                                <input type="hidden" value="<%= usuario[i].id %>">
+                            </form>
+                        </th>
+                    </tr>
+                    <% } %>
+                </table>
+                <% } %>
+            </div>
+            <div id="t_prod">
+                <% if(prod.msg){ %>
+                <p><%= prod.msg %></p>
+                <% }else{ %>
+                <table>
+                    <tr>
+                        <th>Descrissão</th>
+                        <th>Preço</th>
+                        <th>Forncedor</th>
+                        <th></th>
+                    </tr>
+                    <% for(let i=0;i<prod.length;i++){%>
+                    <tr id="info_prod" <%= prod[i].id %>>
+                        <th><%= prod[i].descr %></th>
+                        <th>R$ <%= prod[i].preco %></th>
+                        <th><%= prod[i].nome %></th>
+                        <th>
+                            <form action="/editar_prod" method="post">
+                                <button type="submit" >ED</button>
+                                <input type="hidden" value="<%= prod[i].id %>">
+                            </form>
+                        </th>
+                    </tr>
+                    <% } %>
+                </table>
+                <% } %>
+            </div>
+        </div>
+        <div id="pedidos">
+
+        </div>
+    </section>
+</main>
+<footer>
+    <p>Restaurante do IAGO CRUZ</p>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>

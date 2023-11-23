@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>cheguei aqui cardapio</h1>
+    <a href="/page_usuario">user</a>
+    <a href="/carrinho">carrinho</a>
+    <main>
+        <div id="t_prod">
+            <% if(prod.msg){ %>
+            <p><%= prod.msg %></p>
+            <% }else{ %>
+            <table>
+                <tr>
+                    <th>Descrissão</th>
+                    <th>Preço</th>
+                    <th></th>
+                </tr>
+                <% for(let i=0;i<prod.length;i++){%>
+                <tr id="info_prod" <%= prod[i].id %>>
+                    <th><%= prod[i].descr %></th>
+                    <th>R$<%= prod[i].preco %></th>
+                    <th>
+                        <form action="/add_cart" method="post">
+                            <input type="hidden" name="id_prod" value="<%= prod[i].id %>">
+                            <button type="submit" >AddCart</button>
+                        </form>
+                    </th>
+                </tr>
+                <% } %>
+            </table>
+            <% } %>
+        </div>
+    </main>
+</body>
+</html>
