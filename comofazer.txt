@@ -1,0 +1,12 @@
+git add .
+git commit -m "E"
+git push origin main
+
+//Criar um novo
+
+git init
+url 
+git -U main
+git add .
+git commit -m "E"
+git push -u origin main
