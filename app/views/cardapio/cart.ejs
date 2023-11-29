@@ -21,7 +21,7 @@
                         <p><%= prod[i][0].descr %></p>
                         <p>R$<%= prod[i][0].preco %></p>                          
                         </div>
-                        <div>
+                        <div id="alterar">
                         <form action="/editar_quant" method="post">
                             <p><%= pedido[i].quantidade %></p>
                             <input type="hidden" name="pedido" value="<%= pedido[i].id %>">
@@ -29,13 +29,16 @@
                             <input type="number" style="width: 50px;" name="quant" min="0" oninput="validity.valid||(value='');" value="<%= pedido[i].quantidade %>">                          
                             <button type="submit" >Alterar quantidade</button>
                         </form>     
-                        <form action="/editar_quant" method="post">
-                            <p><%= pedido[i].quantidade %></p>
-                            <input type="hidden" name="pedido" value="<%= pedido[i].id %>">
+                        </div>
+                        <div id="excluir">
+                            <form action="/deletar_item" method="post">
+                            <input type="hidden" name="detalhe_pedido" value="<%= pedido[i].id %>">
+                            <input type="hidden" name="pedido" value="<%= pedido[i].id_pedido %>">
                             <input type="hidden" name="produto" value="<%= prod[i][0].id %>">                       
                             <button type="submit" >X</button>
-                        </form>                       
+                            </form>                            
                         </div>
+  
                     </li>
                     <% } %>
                     <% } %>

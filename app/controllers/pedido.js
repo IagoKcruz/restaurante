@@ -93,7 +93,7 @@ res.render("cardapio/cart.ejs", {pedido: cart_pedido, prod: prod})
 
 }
 
-module.exports.editar_cart = async function(app, req, res){      
+module.exports.editar_item_cart = async function(app, req, res){      
     let id = req.session.id_usuario;
     const dados = req.body;
     console.log(dados)
@@ -101,6 +101,17 @@ module.exports.editar_cart = async function(app, req, res){
     const model_pedido = new app.app.models.model_cart(con)
     let update_quant = await model_pedido.quant_cart(dados.pedido, dados.produto, dados.quant);
     if(update_quant){
+        res.redirect("/carrinho")    
+    }
+}
+
+module.exports.deletar_item_cart = async function(app, req, res){      
+    let id = req.session.id_usuario;
+    const dados = req.body;
+    const con = app.config.con_server;
+    const model_pedido = new app.app.models.model_cart(con)
+    let delete_quant = await model_pedido.delete_cart(dados.detalhe_pedido, dados.pedido, dados.produto);
+    if(delete_quant){
         res.redirect("/carrinho")    
     }
 }
