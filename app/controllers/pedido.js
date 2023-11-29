@@ -28,13 +28,14 @@ async function add_cart(app, req, res, id, dados){
         if(!add_quant){
             console.log("DEU MERDA")
         }else{
-            let prod = await model_pedido.unico_produto_cart(id, dados.id_prod)
-            if(!prod){
-                prod = {msg:"Erro ao carregar dados do produto"}
-            }else{
-                let cart_pedido = await model_pedido.cart_pedido(id);
-                res.render("cardapio/cart.ejs", {pedido: cart_pedido, prod: prod})
-            }            
+            // let prod = await model_pedido.unico_produto_cart(id, dados.id_prod)
+            // if(!prod){
+            //     prod = {msg:"Erro ao carregar dados do produto"}
+            // }else{
+            //     let cart_pedido = await model_pedido.cart_pedido(id);
+            //     res.render("cardapio/cart.ejs", {pedido: cart_pedido, prod: prod[0]})
+            // }    
+            res.redirect("/carrinho")        
         }
     }else{
         let create_pedido = await model_pedido.detalhe_pedido(id, dados);
@@ -42,14 +43,15 @@ async function add_cart(app, req, res, id, dados){
             console.log("DEU ERRADO => carrinho")
             create_pedido = [{msg: "Algo deu errado ao adicionar o produto ao carrinho"}]
         }else{
-            let prod = await model_pedido.unico_produto_cart(id, dados.id_prod)
-            if(!prod){
-                prod = {msg:"Erro ao carregar dados do produto"}
-            }else{
-                let cart_pedido = await model_pedido.cart_pedido(id);
-                res.render("cardapio/cart.ejs", {pedido: cart_pedido, prod: prod})
-            }
-            return;            
+            // let prod = await model_pedido.unico_produto_cart(id, dados.id_prod)
+            // if(!prod){
+            //     prod = {msg:"Erro ao carregar dados do produto"}
+            // }else{
+            //     let cart_pedido = await model_pedido.cart_pedido(id);
+            //     res.render("cardapio/cart.ejs", {pedido: cart_pedido, prod: prod[0]})
+            // }
+            // return;  
+            res.redirect("/carrinho")          
         }    
     }
 }
@@ -66,21 +68,39 @@ module.exports.open_cart = async function(app, req, res){
         aberto = await model_pedido.pedido_aberto(id);
     }else{
     let pedido = req.session.id_pedido = aberto[0].id
-    let tudo_pedido = await model_pedido.produto_pedido(pedido);
-
-    if(tudo_pedido){
-        for(let i=0; tudo_pedido.length > i; i++){
-            prod.push(await model_pedido.unico_produto_cart(pedido, tudo_pedido[i].id_produto))
-        }
-        if(prod.length <= 0){
-            prod = {msg:"Erro ao carregar dados do produto"}
+        let cart_pedido = await model_pedido.cart_pedido(pedido);
+        if(cart_pedido.length <= 0){
+            cart_pedido = [{msg:"Erro ao carregar pedido"}]
+            
         }else{
-            let cart_pedido = await model_pedido.cart_pedido(pedido);
-            res.render("cardapio/cart.ejs", {pedido: cart_pedido, prod: prod})
+            for(let i=0; cart_pedido.length > i; i++){
+            prod[i] = await model_pedido.unico_produto_cart(pedido, cart_pedido[i].id_produto)
+            }
+                if(prod.length <= 0){
+                    prod = [{msg:"Erro ao carregar produto"}]
+                }else{
+                    render_carrinho(req, res, app, cart_pedido, prod)                
+                }
         }
-        return;
     }
+}
 
+async function render_carrinho(req, res, app, cart_pedido, prod){
+
+let valor_total = 0
+//let quantidade_total = 0
+res.render("cardapio/cart.ejs", {pedido: cart_pedido, prod: prod})
+
+}
+
+module.exports.editar_cart = async function(app, req, res){      
+    let id = req.session.id_usuario;
+    const dados = req.body;
+    console.log(dados)
+    const con = app.config.con_server;
+    const model_pedido = new app.app.models.model_cart(con)
+    let update_quant = await model_pedido.quant_cart(dados.pedido, dados.produto, dados.quant);
+    if(update_quant){
+        res.redirect("/carrinho")    
     }
-    
 }

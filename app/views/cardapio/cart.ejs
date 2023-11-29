@@ -11,30 +11,37 @@
         <div id="cart">
             <h2>CARRINHO</h2>
             <ul style="list-style:none">
-                <% if(prod.msg){%>
-                    <li><p><%= prod.msg %></p></li>
+                <% if(pedido.msg){%>
+                    <li><p><%= pedido.msg %></p></li>
                     <%}else{%>
 
                 <% for(let i=0;i<pedido.length;i++){%>                                      
                     <li id="info_prod">
-                        <% if(prod){%>
-                        <p><%= prod.descr %></p>
-                        <p>R$<%= prod.preco %></p>
                         <div>
-                        <% }else{ console.log("nao trouxe dados") } %>
+                        <p><%= prod[i][0].descr %></p>
+                        <p>R$<%= prod[i][0].preco %></p>                          
+                        </div>
+                        <div>
                         <form action="/editar_quant" method="post">
                             <p><%= pedido[i].quantidade %></p>
-                            <input type="hidden" value="<%= pedido[i].id %>">  
-                            <input type="number" style="width: 50px;" name="quant" value="<%= pedido[i].quantidade %>">                          
+                            <input type="hidden" name="pedido" value="<%= pedido[i].id %>">
+                            <input type="hidden" name="produto" value="<%= prod[i][0].id %>">
+                            <input type="number" style="width: 50px;" name="quant" min="0" oninput="validity.valid||(value='');" value="<%= pedido[i].quantidade %>">                          
                             <button type="submit" >Alterar quantidade</button>
-                        </form>                            
+                        </form>     
+                        <form action="/editar_quant" method="post">
+                            <p><%= pedido[i].quantidade %></p>
+                            <input type="hidden" name="pedido" value="<%= pedido[i].id %>">
+                            <input type="hidden" name="produto" value="<%= prod[i][0].id %>">                       
+                            <button type="submit" >X</button>
+                        </form>                       
                         </div>
                     </li>
                     <% } %>
                     <% } %>
             </ul>
             <div>
-                <p>valor total | quantidade de items</p>
+                <p>valor total</p>
             </div>
             <form action="/finalizar">
                 <input type="hidden" value="sessao_pedido">
