@@ -15,7 +15,7 @@ pedido.prototype.select_tem_produto = function(pedido, produto, callback){
         })
     })
 }
-pedido.prototype.select_pedido_produto = function(id, callback){
+pedido.prototype.produto_pedido = function(id, callback){
     return new Promise((resolve, rejects)=>{
         this._con.query(`SELECT * FROM produto_pedido WHERE id_pedido = ${id}`, function(erros,result){
             resolve(result)
@@ -29,16 +29,16 @@ pedido.prototype.select_pedido_cart = function(id, callback){
         })
     })
 }
-pedido.prototype.cart_pedido = function(id, produto, callback){
+pedido.prototype.cart_pedido = function(id, callback){
     return new Promise((resolve, rejects)=>{
         this._con.query(`SELECT * FROM produto_pedido A, pedido B WHERE A.id_produto = B.id AND A.id_pedido = ${id}`, function(erros,result){
             resolve(result)
         })
     })
 }
-pedido.prototype.select_prod_cart = function(id, callback){
+pedido.prototype.unico_produto_cart = function(id, prod, callback){
     return new Promise((resolve, rejects)=>{
-        this._con.query(`SELECT A.id, A.descr, A.preco FROM produto A, produto_pedido B WHERE A.id = B.id_produto AND B.id_pedido = ${id}`, function(erros,result){
+        this._con.query(`SELECT A.id, A.descr, A.preco FROM produto A, produto_pedido B WHERE A.id = B.id_produto AND B.id_pedido = ${id} AND id_produto = ${prod}`, function(erros,result){
             resolve(result)
         })
     })
@@ -50,14 +50,14 @@ pedido.prototype.create_pedido = function(id, callback){
         })
     })
 }
-pedido.prototype.create_produto_pedido = function(pedido, dados, callback){
+pedido.prototype.detalhe_pedido = function(pedido, dados, callback){
     return new Promise((resolve, rejects)=>{
         this._con.query(`INSERT INTO produto_pedido(id, id_pedido, id_produto, quantidade) VALUES(null, ${pedido}, ${dados.id_prod}, 1);`, function(erros,result){
             resolve(result)
         })
     })
 }
-pedido.prototype.em_andamento = function(pedido, dados, callback){
+pedido.prototype.em_andamento = function(pedido, callback){
     return new Promise((resolve, rejects)=>{
         this._con.query(`UPDATE pedido SET id_status = 2 WHERE id = ${pedido};`, function(erros,result){
             resolve(result)
