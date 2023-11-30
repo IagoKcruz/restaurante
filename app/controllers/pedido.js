@@ -1,7 +1,6 @@
 module.exports.open_pedido = async function(app, req, res){
 let tipo_user = req.session.id_tipo
 if(tipo_user == 2){
-    console.log(tipo_user);
     const dados = req.body;
     let id = req.session.id_usuario;
     const con = app.config.con_server;
@@ -28,10 +27,8 @@ async function add_cart(app, req, res, id, dados){
 let tipo_user = req.session.id_tipo
 if(tipo_user == 2){
     const con = app.config.con_server;
-    console.log(id, dados.id_prod)
     const model_pedido = new app.app.models.model_cart(con);
     let tem_produto = await model_pedido.select_tem_produto(id, dados.id_prod);
-    console.log(tem_produto)
     if(tem_produto.length > 0){
         let add_quant = await model_pedido.alterar_quant(id, dados.id_prod);
         if(!add_quant){
@@ -71,12 +68,15 @@ if(tipo_user == 2){
         let cart_pedido = await model_pedido.cart_pedido(pedido);
         if(cart_pedido.length <= 0){
             cart_pedido = [{msg:"Erro ao carregar pedido"}]
-            
+            prod = [{msg:"Erro ao carregar produto"}]
+            render_carrinho(req, res, app, cart_pedido, prod)
+            return;
         }else{
             for(let i=0; cart_pedido.length > i; i++){
             prod[i] = await model_pedido.unico_produto_cart(pedido, cart_pedido[i].id_produto)
             }
                 if(prod.length <= 0){
+                    cart_pedido = [{msg:"Erro ao carregar pedido"}]
                     prod = [{msg:"Erro ao carregar produto"}]
                 }else{
                     render_carrinho(req, res, app, cart_pedido, prod)                
@@ -102,7 +102,6 @@ module.exports.editar_item_cart = async function(app, req, res){
 let tipo_user = req.session.id_tipo
 if(tipo_user == 2){
     const dados = req.body;
-    console.log(dados)
     const con = app.config.con_server;
     const model_pedido = new app.app.models.model_cart(con)
     let update_quant = await model_pedido.quant_cart(dados.pedido, dados.produto, dados.quant);

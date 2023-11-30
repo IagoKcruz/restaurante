@@ -9,7 +9,7 @@ if(!tipo_user){
 }
 module.exports.cadastrar_user = async function(app, req, res){
 let tipo_user = req.session.id_tipo
-if(tipo_user == 2){
+if(!tipo_user){
     const dados = req.body
     const con = app.config.con_server;
     const model_user = new app.app.models.model_user(con)

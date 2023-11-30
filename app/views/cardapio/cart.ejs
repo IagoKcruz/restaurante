@@ -11,10 +11,12 @@
         <div id="cart">
             <h2>CARRINHO</h2>
             <ul style="list-style:none">
-                <% for(let i=0;i<pedido.length;i++){%>   
-                    <% if(prod[i][0].msg){%>
-                        <li><p><%= prod[i][0].msg %></p></li>
-                        <%}else{%>                                   
+                <% if(pedido[0].msg){%>
+                    <li><p><%= pedido[0].msg %></p></li>
+                    <%}else if(prod[0].msg){%> 
+                    <li><p><%= prod[0].msg %></p></li>
+                    <%}else{%>  
+                <%for(let i=0;i<pedido.length;i++){%>                                      
                     <li id="info_prod">
                         <div>
                         <p><%= prod[i][0].descr %></p>
