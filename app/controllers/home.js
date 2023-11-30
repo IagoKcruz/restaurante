@@ -19,6 +19,7 @@ module.exports.validar_login = function(app, req, res){
             return;
         }else{
             let sessao = req.session.id_tipo = result[0].id_tipo_usuario 
+            console.log(sessao)
             let id = req.session.id_usuario = result[0].id;
             if(sessao==2){
                 res.redirect("/cardapio");

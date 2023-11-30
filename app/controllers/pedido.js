@@ -1,4 +1,7 @@
 module.exports.open_pedido = async function(app, req, res){
+let tipo_user = req.session.id_tipo
+if(tipo_user == 2){
+    console.log(tipo_user);
     const dados = req.body;
     let id = req.session.id_usuario;
     const con = app.config.con_server;
@@ -13,11 +16,17 @@ module.exports.open_pedido = async function(app, req, res){
         aberto = await model_pedido.pedido_aberto(id); 
     }
     let pedido = req.session.id_pedido = aberto[0].id
-    add_cart(app, req, res, pedido, dados);
+    add_cart(app, req, res, pedido, dados);    
+  
+}else{
+    res.redirect("/")
+}
 
 }
 
 async function add_cart(app, req, res, id, dados){
+let tipo_user = req.session.id_tipo
+if(tipo_user == 2){
     const con = app.config.con_server;
     console.log(id, dados.id_prod)
     const model_pedido = new app.app.models.model_cart(con);
@@ -28,13 +37,6 @@ async function add_cart(app, req, res, id, dados){
         if(!add_quant){
             console.log("DEU MERDA")
         }else{
-            // let prod = await model_pedido.unico_produto_cart(id, dados.id_prod)
-            // if(!prod){
-            //     prod = {msg:"Erro ao carregar dados do produto"}
-            // }else{
-            //     let cart_pedido = await model_pedido.cart_pedido(id);
-            //     res.render("cardapio/cart.ejs", {pedido: cart_pedido, prod: prod[0]})
-            // }    
             res.redirect("/carrinho")        
         }
     }else{
@@ -43,20 +45,18 @@ async function add_cart(app, req, res, id, dados){
             console.log("DEU ERRADO => carrinho")
             create_pedido = [{msg: "Algo deu errado ao adicionar o produto ao carrinho"}]
         }else{
-            // let prod = await model_pedido.unico_produto_cart(id, dados.id_prod)
-            // if(!prod){
-            //     prod = {msg:"Erro ao carregar dados do produto"}
-            // }else{
-            //     let cart_pedido = await model_pedido.cart_pedido(id);
-            //     res.render("cardapio/cart.ejs", {pedido: cart_pedido, prod: prod[0]})
-            // }
-            // return;  
             res.redirect("/carrinho")          
         }    
     }
+}else{
+    res.redirect("/")
+}
+    
 }
 
 module.exports.open_cart = async function(app, req, res){      
+let tipo_user = req.session.id_tipo
+if(tipo_user == 2){
     let id = req.session.id_usuario;
     let prod = [];
     const con = app.config.con_server;
@@ -83,18 +83,24 @@ module.exports.open_cart = async function(app, req, res){
                 }
         }
     }
+}else{
+    res.redirect("/")
+}
+
 }
 
 async function render_carrinho(req, res, app, cart_pedido, prod){
-
-let valor_total = 0
-//let quantidade_total = 0
-res.render("cardapio/cart.ejs", {pedido: cart_pedido, prod: prod})
-
+let tipo_user = req.session.id_tipo
+if(tipo_user == 2){
+    res.render("cardapio/cart.ejs", {pedido: cart_pedido, prod: prod})
+}else{
+    res.redirect("/")
+}
 }
 
 module.exports.editar_item_cart = async function(app, req, res){      
-    let id = req.session.id_usuario;
+let tipo_user = req.session.id_tipo
+if(tipo_user == 2){
     const dados = req.body;
     console.log(dados)
     const con = app.config.con_server;
@@ -102,11 +108,15 @@ module.exports.editar_item_cart = async function(app, req, res){
     let update_quant = await model_pedido.quant_cart(dados.pedido, dados.produto, dados.quant);
     if(update_quant){
         res.redirect("/carrinho")    
-    }
+    }    
+}else{
+       res.redirect("/")
+}
 }
 
-module.exports.deletar_item_cart = async function(app, req, res){      
-    let id = req.session.id_usuario;
+module.exports.deletar_item_cart = async function(app, req, res){  
+let tipo_user = req.session.id_tipo
+if(tipo_user == 2){
     const dados = req.body;
     const con = app.config.con_server;
     const model_pedido = new app.app.models.model_cart(con)
@@ -114,4 +124,7 @@ module.exports.deletar_item_cart = async function(app, req, res){
     if(delete_quant){
         res.redirect("/carrinho")    
     }
+}else{
+    res.redirect("/")
+}    
 }
