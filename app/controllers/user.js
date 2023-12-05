@@ -40,11 +40,11 @@ if(!tipo_user){
 
 module.exports.page_user = async function(app, req, res){
 let tipo_user = req.session.id_tipo
-if(tipo_user == 2){
+if(tipo_user){
     let id = req.session.id_usuario 
     const con = app.config.con_server;
-    const model_user = new app.app.models.model_user(con)
-    const d_usuario = await model_user.post_usuario(id)
+    const model_user = new app.app.models.model_admin(con)
+    const d_usuario = await model_user.post_listar_usuario(id)
     res.render("user/page_user.ejs", {erro : {}, usuario : d_usuario[0]})
 }else{
     res.redirect("/")
@@ -54,11 +54,11 @@ if(tipo_user == 2){
 
 module.exports.page_alterar = async function(app, req, res){
 let tipo_user = req.session.id_tipo
-if(tipo_user == 2){
+if(tipo_user){
     let id = req.session.id_usuario 
     const con = app.config.con_server;
-    const model_user = new app.app.models.model_user(con)
-    const d_usuario = await model_user.post_usuario(id)
+    const model_user = new app.app.models.model_admin(con)
+    const d_usuario = await model_user.post_listar_usuario(id)
     res.render("user/alterar.ejs", {erro : {}, usuario : d_usuario[0]})
 }else{
     res.redirect("/")
@@ -67,7 +67,7 @@ if(tipo_user == 2){
 
 module.exports.alterar = async function(app, req, res){
 let tipo_user = req.session.id_tipo
-if(tipo_user == 2){
+if(tipo_user){
     const dados = req.body;
     let id = req.session.id_usuario;
     const con = app.config.con_server;
@@ -101,7 +101,7 @@ if(tipo_user == 2){
 
 module.exports.encerrar_sessao = async function(app,req,res){
 let tipo_user = req.session.id_tipo
-if(tipo_user == 2){
+if(tipo_user){
     req.session.destroy()
     res.redirect("/")
 }else{

@@ -31,15 +31,7 @@ user.prototype.post_user_by_email = function(dados, callback){
         })
     })
     
-}
-user.prototype.post_usuario = function(id, callback){
-    return new Promise((resolve, rejects)=>{
-        this._con.query(`SELECT * FROM usuario WHERE id = ${id};`, function(erros,result){
-            resolve(result)
-        })
-    })
-    
-}
+}   
 module.exports = function(){
     return user;
 }

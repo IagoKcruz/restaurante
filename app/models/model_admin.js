@@ -13,7 +13,7 @@ admin.prototype.post_listar_usuarios = function(){
 }
 admin.prototype.post_listar_usuario = function(id, callback){
     return new Promise((resolve, rejects)=>{
-        this._con.query(`SELECT A.nome, A.email, B.descr FROM usuario A, tipo_usuario B WHERE A.id=B.id AND A.id = ${id};`, function(erros,result){
+        this._con.query(`SELECT A.nome, A.email, B.descr FROM usuario A, tipo_usuario B WHERE A.id_tipo_usuario=B.id AND A.id = ${id};`, function(erros,result){
             resolve(result)
         })
     })
