@@ -94,3 +94,13 @@ if(tipo_user == 2){
     res.redirect("/")
 }
 }
+
+module.exports.encerrar_sessao = async function(app,req,res){
+let tipo_user = req.session.id_tipo
+if(tipo_user == 2){
+    req.session.destroy()
+    res.redirect("/")
+}else{
+    res.redirect("/")
+}  
+}

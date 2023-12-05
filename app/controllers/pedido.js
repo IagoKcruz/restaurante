@@ -67,8 +67,8 @@ if(tipo_user == 2){
     let pedido = req.session.id_pedido = aberto[0].id
         let cart_pedido = await model_pedido.cart_pedido(pedido);
         if(cart_pedido.length <= 0){
-            cart_pedido = [{msg:"Erro ao carregar pedido"}]
-            prod = [{msg:"Erro ao carregar produto"}]
+            cart_pedido = [{msg:"Nenhum pedido encontrado"}]
+            prod = [{msg:"Nenhum produto encontrado"}]
             render_carrinho(req, res, app, cart_pedido, prod)
             return;
         }else{

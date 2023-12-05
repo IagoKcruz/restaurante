@@ -11,4 +11,7 @@ module.exports = function(app){
     app.post("/alterar",function(req, res){
         app.app.controllers.user.alterar(app, req, res)
     })
+    app.get("/encerrar_sessao",function(req, res){
+        app.app.controllers.user.encerrar_sessao(app, req, res)
+    })
 }

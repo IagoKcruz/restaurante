@@ -1,4 +1,4 @@
 const app = require("./config/server")();
-app.listen(8080,function(){
+app.listen(1306,function(){
     console.log("//SERVER ON")
 })

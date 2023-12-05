@@ -79,7 +79,6 @@ pedido.prototype.quant_cart = function(pedido, produto, quant, callback){
     })
 }
 pedido.prototype.delete_cart = function(detalhe_pedido, pedido, produto, callback){
-    console.log(detalhe_pedido, pedido, produto)
     return new Promise((resolve, rejects)=>{
         this._con.query(`DELETE FROM produto_pedido WHERE id = ${detalhe_pedido} AND id_pedido = ${pedido} AND id_produto = ${produto}`, function(erros,result){
             resolve(result)
