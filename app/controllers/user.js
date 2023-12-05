@@ -38,10 +38,14 @@ if(!tipo_user){
 }
 }
 
-module.exports.page_user = function(app, req, res){
+module.exports.page_user = async function(app, req, res){
 let tipo_user = req.session.id_tipo
 if(tipo_user == 2){
-    res.render("user/page_user.ejs", {erro : {}, usuario : {}})
+    let id = req.session.id_usuario 
+    const con = app.config.con_server;
+    const model_user = new app.app.models.model_user(con)
+    const d_usuario = await model_user.post_usuario(id)
+    res.render("user/page_user.ejs", {erro : {}, usuario : d_usuario[0]})
 }else{
     res.redirect("/")
 }

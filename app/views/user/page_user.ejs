@@ -1,14 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
 <body>
-    <h1>chegamos aqui</h1>
-    <a href="/page_alterar">ALTERAR</a>
-    <a href="/cardapio">voltar</a>
-    <a href="/encerrar_sessao">Sair</a>
+    <header>
+        <%- include("../../public/menu_user/menus.html")  %>
+
+    </header>
+    <main>
+        <% if(usuario){%>
+        <section style="display: flex; flex-direction: column; gap: 10px; margin-top: 30px;">
+            <span><%= usuario.nome%></span>
+            <span><%= usuario.email%></span>
+            <span>Forma de pagamento</span> 
+        </section>
+        <% } %>
+        <br><br>
+        <a href="/page_alterar">ALTERAR</a>
+        <a href="/encerrar_sessao">Sair</a>
+    </main>
+
 </body>
 </html>
