@@ -284,17 +284,17 @@ module.exports.tela_editar_prod = async function(app, req, res){
 let tipo_user = req.session.id_tipo
 if(tipo_user == 1){
     const id = req.body.id_prod;
+    console.log(id)
     const con = app.config.con_server;
     const model_admin = new app.app.models.model_admin(con);
     const model_cardapio = new app.app.models.model_cardapio(con);
     let fornecedor = await model_admin.listar_fornecedores();
+    let prod = await model_cardapio.post_listar_produto(id)
     if(!fornecedor){
         fornecedor = [{msg:"Erro ao carregar lista de fornecedores"}];
-        res.render("admin/produtos/editar_produto.ejs", {erro:{}, prod: {}, fornecedor: fornecedor});
+        res.render("admin/produtos/editar_produto.ejs", {erro:{}, prod: prod, fornecedor: fornecedor});
     return;
-    }else{
-        let prod = await model_cardapio.post_listar_produto(id)
-        console.log(prod)
+    }else{ 
         res.render("admin/produtos/editar_produto.ejs",{erro:{}, prod: prod, fornecedor: fornecedor});   
     return;     
     }

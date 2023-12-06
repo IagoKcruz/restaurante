@@ -20,15 +20,15 @@
             <div id="cadastro">
                 <form action="/alterar_prod" method="post">
                     <label for="descr">Nome</label>
-                    <input type="text" name="descr" id="nome" value="<%= prod.descr%>">
+                    <input type="text" name="descr" id="nome" value="<%= prod[0].descr%>">
                     <label for="preco">Preço</label>
-                    <input type="text" name="preco" id="preco" value="<%= prod.preco%>">
+                    <input type="text" name="preco" id="preco" value="<%= prod[0].preco%>">
                     <select name="fornecedor" id="fornecedor">
                         <% for(let i = 0; fornecedor.length > i; i++){%>
                             <option value="<%= fornecedor[i].id%>"><%= fornecedor[i].nome%></option>
                         <%}%>
                     </select>
-                    <input type="hidden" value="<%= prod.id %>" name="id">
+                    <input type="hidden" value="<%= prod[0].id %>" name="id">
                     <button type="submit">Cadastrar Produto</button>
                 </form>
                 <a href="/administrador">voltar</a>
