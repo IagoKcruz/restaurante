@@ -15,8 +15,8 @@
     <section>
         <div id="informacoes">
             <div id="t_user">
-                <% if(usuario.msg){ %>
-                <p><%= usuario.msg %></p>
+                <% if(usuario[0].msg){ %>
+                <p><%= usuario[0].msg %></p>
                 <% }else{ %>
                 <table>
                     <tr>
@@ -47,8 +47,8 @@
                 </div>
             </div>
             <div id="t_prod">
-                <% if(prod.msg){ %>
-                <p><%= prod.msg %></p>
+                <% if(prod[0].msg){ %>
+                <p><%= prod[0].msg %></p>
                 <% }else{ %>
                 <table>
                     <tr>
@@ -79,8 +79,8 @@
                 </div>
             </div>
             <div id="t_fornecedores">
-                <% if(fornecedor.msg){ %>
-                <p><%= fornecedor.msg %></p>
+                <% if(fornecedor[0].msg){ %>
+                <p><%= fornecedor[0].msg %></p>
                 <% }else{ %>
                 <table>
                     <tr>

@@ -19,11 +19,11 @@
     <main>
         <form action="/cad_forncedor" method="post">
             <label for="nome">Usuario</label>
-            <input type="text" name="nome" value="<%= usuario.nome%>">
+            <input type="text" name="nome" value="<%= fornecedor.nome%>">
             <label for="cnpj">CNPJ</label>
-            <input type="text" name="cnpj" value="<%= usuario.cnpj%>">
+            <input type="text" name="cnpj" value="<%= fornecedor.cnpj%>">
             <label for="email">Email</label>
-            <input type="email" name="email" value="<%= usuario.email%>">
+            <input type="email" name="email" value="<%= fornecedor.email%>">
             <button type="submit">Cadastrar</button>
         </form>
         <a href="/administrador">voltar</a>
