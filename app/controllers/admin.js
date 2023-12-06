@@ -27,11 +27,9 @@ module.exports.tela_editar_usuario = async function(app, req, res){
     let tipo_user = req.session.id_tipo
     if(tipo_user == 1){
         let id = req.body.id_usuario
-        console.log(id)
         const con = app.config.con_server;
         const model_admin = new app.app.models.model_admin(con)
         const usuario = await model_admin.post_listar_usuario(id)
-        console.log(usuario)
     res.render("admin/usuario/editar_user.ejs", {erro : {}, usuario : usuario[0]})
 }else{
         res.redirect("/")
@@ -42,11 +40,9 @@ module.exports.tela_editar_fornecedor = async function(app, req, res){
     let tipo_user = req.session.id_tipo
     if(tipo_user == 1){
         let id = req.body.id_usuario
-        console.log(id)
         const con = app.config.con_server;
         const model_admin = new app.app.models.model_admin(con)
         const usuario = await model_admin.listar_fornecedor(id)
-        console.log(usuario)
     res.render("admin/usuario/editar_user.ejs", {erro : {}, usuario : usuario[0]})
 }else{
         res.redirect("/")
@@ -57,7 +53,6 @@ module.exports.cadastrar_user = async function(app, req, res){
 let tipo_user = req.session.id_tipo
 if(!tipo_user == "1"){
     const dados = req.body
-    console.log(dados)
     const con = app.config.con_server;
     const model_user = new app.app.models.model_user(con)
     const model_admin = new app.app.models.model_admin(con)
@@ -127,7 +122,6 @@ module.exports.cadastrar_fornecedor = async function(app, req, res){
 let tipo_user = req.session.id_tipo
 if(!tipo_user == "1"){
     const dados = req.body
-    console.log(dados)
     const con = app.config.con_server;
     const model_admin = new app.app.models.model_admin(con)
     req.assert("nome", "Voce deve preencher o nome").notEmpty();

@@ -7,10 +7,10 @@ if(tipo_user == 2){
     const model_pedido = new app.app.models.model_cart(con)
     let aberto = await model_pedido.pedido_aberto(id);
     if(aberto == 0){
-        console.log("NÃO TEM PEDIDO")
         let create = await model_pedido.create_pedido(id); 
         if(!create){
-            console.log("DEU ERRADO")
+            create_pedido = [{msg: "Algo deu errado ao adicionar um pedido ao carrinho"}]
+            res.render("cardapio/cart.ejs", {pedido: create_pedido, prod: create_pedido})
         }
         aberto = await model_pedido.pedido_aberto(id); 
     }
@@ -32,15 +32,17 @@ if(tipo_user == 2){
     if(tem_produto.length > 0){
         let add_quant = await model_pedido.alterar_quant(id, dados.id_prod);
         if(!add_quant){
-            console.log("DEU MERDA")
+            add_quant = [{msg: "Algo deu errado ao alterar quantidade do produto do carrinho"}]
+            res.render("cardapio/cart.ejs", {pedido: add_quant, prod: add_quant})
         }else{
             res.redirect("/carrinho")        
         }
     }else{
         let create_pedido = await model_pedido.detalhe_pedido(id, dados);
         if(create_pedido > 0){
-            console.log("DEU ERRADO => carrinho")
+
             create_pedido = [{msg: "Algo deu errado ao adicionar o produto ao carrinho"}]
+            res.render("cardapio/cart.ejs", {pedido: create_pedido, prod: create_pedido})
         }else{
             res.redirect("/carrinho")          
         }    
@@ -59,9 +61,7 @@ if(tipo_user == 2){
     const con = app.config.con_server;
     const model_pedido = new app.app.models.model_cart(con)
     let aberto = await model_pedido.pedido_aberto(id);
-    
     if(aberto > 0){
-        console.log("não tem nada")
         aberto = await model_pedido.pedido_aberto(id);
     }else{
     let pedido = req.session.id_pedido = aberto[0].id
