@@ -233,10 +233,10 @@ if(tipo_user == 1){
     let fornecedor = await model_admin.listar_fornecedores();
     if(!fornecedor){
         fornecedor = [{msg:"Erro ao carregar lista de fornecedores"}];
-        res.render("admin/cadastro_produtrar.ejs", {erro:{},  prod: {}, fornecedor: fornecedor});
+        res.render("admin/cadastrar_produto.ejs", {erro:{},  prod: {}, fornecedor: fornecedor});
     return;
     }else{
-        res.render("admin/cadastro_produtrar.ejs",{erro:{},  prod: {}, fornecedor: fornecedor});   
+        res.render("admin/cadastrar_produto.ejs",{erro:{},  prod: {}, fornecedor: fornecedor});   
     return;     
     }
 }else{
@@ -302,7 +302,7 @@ if(tipo_user == 1){
 }   
 }
     
-module.exports.alterar_forncedor = async function(app, req, res){
+module.exports.alterar_prod = async function(app, req, res){
 let tipo_user = req.session.id_tipo;
 if(tipo_user == "1"){
     const dados = req.body;

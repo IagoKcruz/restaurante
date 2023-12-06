@@ -19,7 +19,7 @@ module.exports = function(app){
         app.app.controllers.admin.alterar_usuario(app, req, res)
     })
 
-    app.psot('/cadatrar_forncedor',function(req, res){
+    app.post('/cadatrar_forncedor',function(req, res){
         app.app.controllers.admin.tela_cadastrar_fornecedor(app, req, res)
     })
     app.post('/editar_fornecedor',function(req, res){
@@ -32,7 +32,7 @@ module.exports = function(app){
         app.app.controllers.admin.alterar_forncedor(app, req, res)
     })
 
-    app.psot('/cadastrar_prod',function(req, res){
+    app.post('/cadastrar_prod',function(req, res){
         app.app.controllers.admin.tela_cadastrar_prod(app, req, res)
     })
     app.post('/cad_prod',function(req, res){

@@ -8,7 +8,7 @@
 <body>
     <h1>tela admin</h1>
     <a href="/page_admin">user</a>
-</header>d
+</header>
 <main>
     <section>
         <div id="informacoes">
@@ -87,8 +87,8 @@
                         <th>Cnpj</th>
                         <th></th>
                     </tr>
-                    <% for(let i=0;i<prod.length;i++){%>
-                    <tr id="info_prod" <%= prod[i].id %>>
+                    <% for(let i=0;i<fornecedor.length;i++){%>
+                    <tr id="info_fornecedor">
                         <th><%= fornecedor[i].nome %></th>
                         <th>R$ <%= fornecedor[i].email %></th>
                         <th><%= fornecedor[i].cnpj %></th>
