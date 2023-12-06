@@ -41,4 +41,7 @@ module.exports = function(app){
     app.post('/editar_prod',function(req, res){
         app.app.controllers.admin.tela_editar_prod(app, req, res)
     })
+    app.post('/alterar_prod',function(req, res){
+        app.app.controllers.admin.alterar_prod(app, req, res)
+    })
 }
