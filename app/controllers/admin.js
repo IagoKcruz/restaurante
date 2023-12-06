@@ -180,7 +180,7 @@ if(tipo_user == 1){
     const con = app.config.con_server;
     const model_admin = new app.app.models.model_admin(con);
     const usuario = await model_admin.listar_fornecedor(id);
-    res.render("admin/usuario/editar_forn.ejs", {erro : {}, usuario : usuario[0]});
+    res.render("admin/fornecedor/editar_forn.ejs", {erro : {}, usuario : usuario[0]});
     return;
 }else{
     res.redirect("/");
