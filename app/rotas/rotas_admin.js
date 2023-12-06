@@ -35,7 +35,10 @@ module.exports = function(app){
     app.psot('/cadastrar_prod',function(req, res){
         app.app.controllers.admin.tela_cadastrar_prod(app, req, res)
     })
-    app.post('/cad_produto',function(req, res){
-        app.app.controllers.admin.cadastrar_produto(app, req, res)
+    app.post('/cad_prod',function(req, res){
+        app.app.controllers.admin.cadastrar_prod(app, req, res)
+    })
+    app.post('/editar_prod',function(req, res){
+        app.app.controllers.admin.tela_editar_prod(app, req, res)
     })
 }
