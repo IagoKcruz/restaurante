@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>  
+    <header>
+        <h1>Alterar</h1>
+        <% if(erro){ %>
+            <ul><% for(let i = 0; i < erro.length; i++ ){%>
+               <li><%= erro[i].msg %></li> 
+                <% } %>
+            </ul>
+        <% } %>
+    </header>
+    <main>
+        <form action="/alterar_forncedor" method="post">
+            <label for="nome">Usuario</label>
+            <input type="text" name="nome" value="<%= usuario.nome%>">
+            <label for="cnpj">Senha</label>
+            <input type="text" name="cnpj" value="<%= usuario.cnpj%>">
+            <label for="email">Email</label>
+            <input type="email" name="email" value="<%= usuario.email%>">
+            <p> Tipo de usuario <%= usuario.descr%></p>
+            <input type="hidden" value="<%= usuario.id %>" name="id">
+            <button type="submit">Alterar</button>
+        </form>
+    </main>
+    <footer>
+        <a href="/administrador">voltar</a>
+        <p>Restaurante do IAGO CRUZ</p>
+    </footer>
+</body>
+</html>

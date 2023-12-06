@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>  
+    <header>
+        <h1>Cadastrar</h1>
+        <% if(erro){ %>
+            <ul><% for(let i = 0; i < erro.length; i++ ){%>
+               <li><%= erro[i].msg %></li> 
+                <% } %>
+            </ul>
+        <% } %>
+    </header>
+    <main>
+        <form action="/cad_forncedor" method="post">
+            <label for="nome">Usuario</label>
+            <input type="text" name="nome" value="<%= usuario.nome%>">
+            <label for="cnpj">Senha</label>
+            <input type="text" name="cnpj" value="<%= usuario.cnpj%>">
+            <label for="email">Email</label>
+            <input type="email" name="email" value="<%= usuario.email%>">
+            <button type="submit">Cadastrar</button>
+        </form>
+        <a href="/page_admin">user</a>
+    </main>
+    <footer>
+        <p>Restaurante do IAGO CRUZ</p>
+    </footer>
+</body>
+</html>
