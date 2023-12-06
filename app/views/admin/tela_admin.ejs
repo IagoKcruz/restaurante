@@ -64,7 +64,7 @@
                         <th><%= prod[i].nome %></th>
                         <th>
                             <form action="/editar_prod" method="post">
-                                <input type="hidden" value="<%= prod[i].id %>">
+                                <input type="hidden" name="id_prod" value="<%= prod[i].id %>">
                                 <button type="submit" >ED</button>
                             </form>
                         </th>
@@ -96,7 +96,7 @@
                         <th><%= fornecedor[i].cnpj %></th>
                         <th>
                             <form action="/editar_fornecedor" method="post">
-                                <input type="hidden" value="<%= fornecedor[i].id %>">
+                                <input type="hidden" id="id_fornecedor" value="<%= fornecedor[i].id %>">
                                 <button type="submit" >ED</button>
                             </form>
                         </th>

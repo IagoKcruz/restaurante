@@ -176,10 +176,10 @@ if(!tipo_user == "1"){
 module.exports.tela_editar_fornecedor = async function(app, req, res){
 let tipo_user = req.session.id_tipo
 if(tipo_user == 1){
-    let id = req.body.id_usuario;
+    let id = req.body.id_fornecedor;
     const con = app.config.con_server;
     const model_admin = new app.app.models.model_admin(con);
-    const usuario = await model_admin.listar_fornecedor(id);
+    const usuario = await model_admin.listar_fornecedores(id);
     res.render("admin/fornecedor/editar_forn.ejs", {erro : {}, usuario : usuario[0]});
     return;
 }else{
@@ -283,7 +283,7 @@ if(!tipo_user == "1"){
 module.exports.tela_editar_prod = async function(app, req, res){
 let tipo_user = req.session.id_tipo
 if(tipo_user == 1){
-    const dados = req.body;
+    const dados = req.body.id_prod;
     const con = app.config.con_server;
     const model_admin = new app.app.models.model_admin(con);
     let fornecedor = await model_admin.listar_fornecedores();
