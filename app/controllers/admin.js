@@ -94,6 +94,10 @@ if(!tipo_user == "1"){
         if(cadastrar){
             res.redirect("/adiministrador");
         return;
+        }else{
+            desvio = [{msg:"Erro ao cadastrar produto"}];
+            res.render("admin/cadastrar_produto.ejs",{erro:desvio, usuario:dados});
+        return;
         }  
     }
 }else{
@@ -161,7 +165,11 @@ if(!tipo_user == "1"){
         if(cadastrar){
             res.redirect("/adiministrador");
         return;
-        }  
+        }else{
+            desvio = [{msg:"Erro ao cadastrar produto"}];
+            res.render("admin/cadastrar_produto.ejs",{erro:desvio, usuario:dados});
+            return;
+        } 
     }
 }else{
     res.redirect("/")
@@ -228,7 +236,10 @@ if(!tipo_user == "1"){
     if(produto){
         res.redirect("/administrador")
         return;
-    }  
+    }else{
+        desvio = [{msg:"Erro ao cadastrar produto"}];
+        res.render("admin/cadastrar_produto.ejs",{erro:desvio, prod:dados, fornecedor: fornecedor});
+    }
 
 }else{
     res.redirect("/")
