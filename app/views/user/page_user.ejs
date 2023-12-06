@@ -6,12 +6,16 @@
     <title>Document</title>
 </head>
 <body>
+    <% if(usuario){%>
     <header>
-        <%- if(usuario.descr == "cliente"){include("../../public/menu_user/menus.html")}%>
-        <%- else{include("../../public/menu_admin/menus.html")}  %>
+        <% if(usuario.descr == "cliente"){ %>
+        <%- include("../../public/menu_user/menus.html") %>
+        <% }else if(usuario.descr == "administrador"){ %>
+        <%- include("../../public/menu_admin/menus.html") %>
+        <% } %>
     </header>
     <main>
-        <% if(usuario){%>
+        
         <section style="display: flex; flex-direction: column; gap: 10px; margin-top: 30px;">
             <span><%= usuario.nome%></span>
             <span><%= usuario.email%></span>
