@@ -49,6 +49,24 @@ module.exports.tela_editar_fornecedor = async function(app, req, res){
 }   
 }
 
+module.exports.tela_cadastrar_prod = async function(app, req, res){
+let tipo_user = req.session.id_tipo
+if(tipo_user == 1){
+    const con = app.config.con_server;
+    const model_admin = new app.app.models.model_admin(con);
+    let fornecedor = await model_admin.listar_fornecedores();
+    if(!fornecedor){
+        fornecedor = [{msg:"Erro ao carregar lista de fornecedores"}];
+        res.render("admin/cadastrar_produto.ejs", {erro:{},  prod: {}, fornecedor: fornecedor}) 
+    }else{
+        res.render("admin/cadastrar_produto.ejs",{erro:{},  prod: {}, fornecedor: fornecedor})        
+    }
+
+}else{
+    res.redirect("/")
+}  
+}
+
 module.exports.cadastrar_user = async function(app, req, res){
 let tipo_user = req.session.id_tipo
 if(!tipo_user == "1"){
@@ -179,6 +197,39 @@ if(tipo_user == "1"){
             }
         }  
     }
+}else{
+    res.redirect("/")
+}
+}
+
+module.exports.cadastrar_user = async function(app, req, res){
+let tipo_user = req.session.id_tipo
+if(!tipo_user == "1"){
+    const dados = req.body
+    const con = app.config.con_server;
+    const model_admin = new app.app.models.model_admin(con)
+    const model_cardapio = new app.app.models.model_cardapio(con)
+    req.assert("descr", "Voce deve preencher o nome").notEmpty();
+    req.assert("preco", "Voce deve preencher o preço").notEmpty();
+    req.assert("fornecedor", "Voce deve preencher o campo de fornecedor").notEmpty();
+    const desvio = req.validationErrors();
+    if(desvio){
+        let fornecedor = await model_admin.listar_fornecedores();    
+        if(!fornecedor){
+            fornecedor = [{msg:"Erro ao carregar lista de fornecedores"}];
+            res.render("admin/cadastrar_produto.ejs", {erro:desvio, prod:dados, fornecedor: fornecedor});
+            return;
+        }else{
+            res.render("admin/cadastrar_produto.ejs",{erro:desvio, prod:dados, fornecedor: fornecedor});
+            return;       
+        }
+    }
+    let produto = await model_cardapio.cadastrar_prod(dados) 
+    if(produto){
+        res.redirect("/administrador")
+        return;
+    }  
+
 }else{
     res.redirect("/")
 }

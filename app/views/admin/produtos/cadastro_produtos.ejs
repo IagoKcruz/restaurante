@@ -10,6 +10,12 @@
         <%- include("../public/home_admin/menus;html")%>
     </header>
     <main>
+        <% if(erro){ %>
+            <ul><% for(let i = 0; i < erro.length; i++ ){%>
+               <li><%= erro[i].msg %></li> 
+                <% } %>
+            </ul>
+        <% } %>
         <section>
             <div id="cadastro">
                 <form action="/cadastrar_produto">
