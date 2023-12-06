@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Produtos</title>
+</head>
+<body>
+    <header>
+        <%- include("../public/home_admin/menus;html")%>
+    </header>
+    <main>
+        <section>
+            <div id="cadastro">
+                <form action="/cadastrar_produto">
+                    <label for="descr">Nome</label>
+                    <input type="text" name="descr" id="nome" value="<%= prod.descr%>">
+                    <label for="preco">Preço</label>
+                    <input type="text" name="preco" id="preco" value="<%= prod.preco%>">
+                    <select name="fornecedor" id="fornecedor">
+                        <% for(let = i; fornecedor.length > i; i++){%>
+                            <option value="<%= fornecedor[i].id%>"><%= fornecedor[i].nome%></option>
+                        <%}%>
+                    </select>
+                    <button type="submit">Cadastrar Produto</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    <footer><h6>Resaturande do Iago Cruz</h6></footer>
+</body>
+</html>

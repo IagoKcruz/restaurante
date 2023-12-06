@@ -66,6 +66,33 @@
                 </table>
                 <% } %>
             </div>
+            <div id="t_fornecedores">
+                <% if(fornecedor.msg){ %>
+                <p><%= fornecedor.msg %></p>
+                <% }else{ %>
+                <table>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Cnpj</th>
+                        <th></th>
+                    </tr>
+                    <% for(let i=0;i<prod.length;i++){%>
+                    <tr id="info_prod" <%= prod[i].id %>>
+                        <th><%= fornecedor[i].nome %></th>
+                        <th>R$ <%= fornecedor[i].email %></th>
+                        <th><%= fornecedor[i].cnpj %></th>
+                        <th>
+                            <form action="/editar_fornecedor" method="post">
+                                <input type="hidden" value="<%= fornecedor[i].id %>">
+                                <button type="submit" >ED</button>
+                            </form>
+                        </th>
+                    </tr>
+                    <% } %>
+                </table>
+                <% } %>
+            </div>
         </div>
     </section>
 </main>
