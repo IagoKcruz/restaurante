@@ -35,6 +35,34 @@ admin.prototype.update_user = function(dados, callback){
         })
     })
 }
+admin.prototype.listar_fornecedores = function(callback){    
+    return new Promise((resolve, rejects)=>{
+        this._con.query(`SELECT * FROM fornecedor`, function(erros,result){
+            resolve(result)
+        })
+    })
+}
+admin.prototype.select_fornecedor = function(id, callback){    
+    return new Promise((resolve, rejects)=>{
+        this._con.query(`SELECT * FROM fornecedor WHERE id = ${id}`, function(erros,result){
+            resolve(result)
+        })
+    })
+}
+admin.prototype.cadastrar_fornecedor = function(dados, callback){    
+    return new Promise((resolve, rejects)=>{
+        this._con.query(`INSERT INTO fornecedor ?`, dados, function(erros,result){
+            resolve(result)
+        })
+    })
+}
+admin.prototype.update_fornecedor = function(dados, callback){
+    return new Promise((resolve, rejects)=>{
+        this._con.query(`UPDATE usuario SET nome = '${dados.nome}', email = '${dados.email}', cnpj = ${dados.cnpj} WHERE id = ${dados.id}`, function(erros,result){
+            resolve(result)
+        })
+    })
+}
 admin.prototype.post_delete_user = function(id, callback){
     this._con.query(`DELETE FROM usuario WHERE id = ${id}`, callback)
 }
