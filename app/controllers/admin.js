@@ -233,10 +233,10 @@ if(tipo_user == 1){
     let fornecedor = await model_admin.listar_fornecedores();
     if(!fornecedor){
         fornecedor = [{msg:"Erro ao carregar lista de fornecedores"}];
-        res.render("admin/cadastrar_produto.ejs", {erro:{},  prod: {}, fornecedor: fornecedor});
+        res.render("admin/produtos/cadastrar_produtos.ejs", {erro:{},  prod: {}, fornecedor: fornecedor});
     return;
     }else{
-        res.render("admin/cadastrar_produto.ejs",{erro:{},  prod: {}, fornecedor: fornecedor});   
+        res.render("admin/produtos/cadastrar_produtos.ejs",{erro:{},  prod: {}, fornecedor: fornecedor});   
     return;     
     }
 }else{
@@ -260,10 +260,10 @@ if(!tipo_user == "1"){
         let fornecedor = await model_admin.listar_fornecedores();    
         if(!fornecedor){
             fornecedor = [{msg:"Erro ao carregar lista de fornecedores"}];
-            res.render("admin/cadastrar_produto.ejs", {erro:desvio, prod:dados, fornecedor: fornecedor});
+            res.render("admin/produtos/cadastrar_produtos.ejs", {erro:desvio, prod:dados, fornecedor: fornecedor});
             return;
         }else{
-            res.render("admin/cadastrar_produto.ejs",{erro:desvio, prod:dados, fornecedor: fornecedor});
+            res.render("admin/produtos/cadastrar_produtos.ejs",{erro:desvio, prod:dados, fornecedor: fornecedor});
             return;       
         }
     }
@@ -273,7 +273,7 @@ if(!tipo_user == "1"){
         return;
     }else{
         desvio = [{msg:"Erro ao cadastrar produto"}];
-        res.render("admin/cadastrar_produto.ejs",{erro:desvio, prod:dados, fornecedor: fornecedor});
+        res.render("admin/produtos/cadastrar_produto.ejs",{erro:desvio, prod:dados, fornecedor: fornecedor});
     }
 }else{
     res.redirect("/")
@@ -289,11 +289,11 @@ if(tipo_user == 1){
     let fornecedor = await model_admin.listar_fornecedores();
     if(!fornecedor){
         fornecedor = [{msg:"Erro ao carregar lista de fornecedores"}];
-        res.render("admin/editar_produtrar.ejs", {prod: {}, fornecedor: fornecedor});
+        res.render("admin/produtos/editar_prod.ejs", {prod: {}, fornecedor: fornecedor});
     return;
     }else{
         //select dados produto unico
-        res.render("admin/editar_produtrar.ejs",{prod: prod, fornecedor: fornecedor});   
+        res.render("admin/produtos/editar_produtrar.ejs",{prod: prod, fornecedor: fornecedor});   
     return;     
     }
 }else{
@@ -317,10 +317,10 @@ if(tipo_user == "1"){
         let fornecedor = await model_admin.listar_fornecedores();    
         if(!fornecedor){
             fornecedor = [{msg:"Erro ao carregar lista de fornecedores"}];
-            res.render("admin/cadastrar_produto.ejs", {erro:desvio, prod:dados, fornecedor: fornecedor});
+            res.render("admin/produtos/editar_prod.ejs", {erro:desvio, prod:dados, fornecedor: fornecedor});
             return;
         }else{
-            res.render("admin/cadastrar_produto.ejs",{erro:desvio, prod:dados, fornecedor: fornecedor});
+            res.render("admin/produtos/editar_prod.ejs",{erro:desvio, prod:dados, fornecedor: fornecedor});
             return;       
         }
     }
@@ -333,10 +333,10 @@ if(tipo_user == "1"){
         let fornecedor = await model_admin.listar_fornecedores();    
         if(!fornecedor){
             fornecedor = [{msg:"Erro ao carregar lista de fornecedores"}];
-            res.render("admin/cadastrar_produto.ejs", {erro:desvio, prod:dados, fornecedor: fornecedor});
+            res.render("admin/produtos/editar_prod.ejs", {erro:desvio, prod:dados, fornecedor: fornecedor});
             return;
         }else{
-            res.render("admin/cadastrar_produto.ejs",{erro:desvio, prod:dados, fornecedor: fornecedor});
+            res.render("admin/produtos/editar_prod.ejs",{erro:desvio, prod:dados, fornecedor: fornecedor});
             return;       
         }
     }

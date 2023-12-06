@@ -7,7 +7,7 @@
 </head>
 <body>
     <header>
-        <%- include("../public/home_admin/menus;html")%>
+        <%- include("../../../public/menu_admin/menus.html") %>
     </header>
     <main>
         <% if(erro){ %>
@@ -24,7 +24,7 @@
                     <label for="preco">Preço</label>
                     <input type="text" name="preco" id="preco" value="<%= prod.preco%>">
                     <select name="fornecedor" id="fornecedor">
-                        <% for(let = i; fornecedor.length > i; i++){%>
+                        <% for(let i = 0; fornecedor.length > i; i++){%>
                             <option value="<%= fornecedor[i].id%>"><%= fornecedor[i].nome%></option>
                         <%}%>
                     </select>

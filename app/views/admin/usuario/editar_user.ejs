@@ -8,6 +8,7 @@
 <body>  
     <header>
         <h1>Alterar</h1>
+        <%- include("../../../public/menu_admin/menus.html") %>
         <% if(erro){ %>
             <ul><% for(let i = 0; i < erro.length; i++ ){%>
                <li><%= erro[i].msg %></li> 
