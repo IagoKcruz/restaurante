@@ -7,7 +7,7 @@
 </head>
 <body>  
     <header>
-        <h1>Alterar</h1>
+        <h1>Cadastrar</h1>
         <% if(erro){ %>
             <ul><% for(let i = 0; i < erro.length; i++ ){%>
                <li><%= erro[i].msg %></li> 
@@ -16,24 +16,23 @@
         <% } %>
     </header>
     <main>
-        <form action="/alterar_admin" method="post">
+        <form action="/cad_usuario_admin" method="post">
             <label for="nome">Usuario</label>
             <input type="text" name="nome" value="<%= usuario.nome%>">
+            <label for="senha">Senha</label>
+            <input type="text" name="senha" value="<%= usuario.senha%>">
             <label for="email">Email</label>
             <input type="email" name="email" value="<%= usuario.email%>">
-            <br><label for="tipo">Tipo Atual</label>
-            <p><%= usuario.descr%></p>
-            <label for="tipo_usuario">Mudar para: </label>
+            <label for="tipo">Tipo Usuario</label>
             <select name="id_tipo_usuario" id="tipo_usuario">
                 <option value="1">Admin</option>
                 <option value="2">Cliente</option>
             </select>
-            <input type="hidden" value="<%= usuario.id %>" name="id">
-            <button type="submit">Alterar</button>
+            <button type="submit">Cadastrar</button>
         </form>
+        <a href="/page_admin">user</a>
     </main>
     <footer>
-        <a href="/administrador">voltar</a>
         <p>Restaurante do IAGO CRUZ</p>
     </footer>
 </body>

@@ -8,4 +8,11 @@ module.exports = function(app){
     app.get('/page_admin',function(req, res){
         app.app.controllers.user.page_user(app, req, res)
     })
+    app.post('/cad_usuario_admin',function(req, res){
+        app.app.controllers.admin.cadastrar_user(app, req, res)
+    })
+    app.post('/alterar_admin',function(req, res){
+        app.app.controllers.admin.alterar_user(app, req, res)
+    })
+    
 }

@@ -30,8 +30,8 @@
                         <th><%= usuario[i].descr %></th>
                         <th>
                             <form action="/editar_user" method="post">
+                                <input type="hidden" name="id_usuario" value="<%= usuario[i].id %>">
                                 <button type="submit" >ED</button>
-                                <input type="hidden" value="<%= usuario[i].id %>">
                             </form>
                         </th>
                     </tr>
@@ -57,8 +57,8 @@
                         <th><%= prod[i].nome %></th>
                         <th>
                             <form action="/editar_prod" method="post">
-                                <button type="submit" >ED</button>
                                 <input type="hidden" value="<%= prod[i].id %>">
+                                <button type="submit" >ED</button>
                             </form>
                         </th>
                     </tr>
@@ -66,9 +66,6 @@
                 </table>
                 <% } %>
             </div>
-        </div>
-        <div id="pedidos">
-
         </div>
     </section>
 </main>
