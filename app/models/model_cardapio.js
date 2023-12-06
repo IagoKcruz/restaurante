@@ -15,15 +15,21 @@ produto.prototype.post_listar_produto = function(id, callback){
         })
     })
 }
-produto.prototype.post_cadastrar_user = function(dados, callback){
-    this._con.query(`INSERT INTO produto ?`, dados, callback)
+produto.prototype.cadastrar_produto = function(id, callback){
+    return new Promise((resolve, rejects)=>{
+        this._con.query(`INSERT INTO produto ?`, dados, function(erros,result){
+            resolve(result)
+        })
+    })
 }
-produto.prototype.post_update_user = function(dados, callback){
-    this._con.query(`UPDATE produto SET descr = '${dados.descr}', preco = ${dados.preco}, id_fornecedor = ${dados.id_fornecedor} WHERE id = ${dados.id}`, callback)
+produto.prototype.alterar_produto = function(id, callback){
+    return new Promise((resolve, rejects)=>{
+        this._con.query(`UPDATE produto SET descr = '${dados.descr}', preco = ${dados.preco}, id_fornecedor = ${dados.id_fornecedor} WHERE id = ${dados.id}`, function(erros,result){
+            resolve(result)
+        })
+    })
 }
-produto.prototype.post_delete_user = function(id, callback){
-    this._con.query(`DELETE FROM produto WHERE id = ${id}`, callback)
-}
+
 module.exports = function(){
     return produto;
 }

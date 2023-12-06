@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar de Produto</title>
+</head>
+<body>
+    <header>
+        <%- include("../../../public/menu_admin/menus.html") %>
+    </header>
+    <main>
+        <% if(erro){ %>
+            <ul><% for(let i = 0; i < erro.length; i++ ){%>
+               <li><%= erro[i].msg %></li> 
+                <% } %>
+            </ul>
+        <% } %>
+        <section>
+            <div id="cadastro">
+                <form action="/alterar_prod" method="post">
+                    <label for="descr">Nome</label>
+                    <input type="text" name="descr" id="nome" value="<%= prod.descr%>">
+                    <label for="preco">Preço</label>
+                    <input type="text" name="preco" id="preco" value="<%= prod.preco%>">
+                    <select name="fornecedor" id="fornecedor">
+                        <% for(let i = 0; fornecedor.length > i; i++){%>
+                            <option value="<%= fornecedor[i].id%>"><%= fornecedor[i].nome%></option>
+                        <%}%>
+                    </select>
+                    <input type="hidden" value="<%= prod.id %>" name="id">
+                    <button type="submit">Cadastrar Produto</button>
+                </form>
+                <a href="/administrador">voltar</a>
+            </div>
+        </section>
+    </main>
+    <footer><h6>Resaturande do Iago Cruz</h6></footer>
+</body>
+</html>
