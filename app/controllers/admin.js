@@ -1,79 +1,108 @@
 module.exports.tela_admin = async function(app, req, res){
-let tipo_user = req.session.id_tipo
+let tipo_user = req.session.id_tipo;
 if(tipo_user == 1){
     const con = app.config.con_server;
-    const model_admin = new app.app.models.model_admin(con)
-    const model_cardapio = new app.app.models.model_cardapio(con)
-    let usuario = await model_admin.post_listar_usuarios()
-    let prod = await model_cardapio.post_listar_produtos()
-    let fornecedor = await model_admin.listar_fornecedores()
+    const model_admin = new app.app.models.model_admin(con);
+    const model_cardapio = new app.app.models.model_cardapio(con);
+    let usuario = await model_admin.post_listar_usuarios();
+    let prod = await model_cardapio.post_listar_produtos();
+    let fornecedor = await model_admin.listar_fornecedores();
     if(!usuario){
-        usuario = [{msg:"Erro ao carregar lista de usuarios"}]
+        usuario = [{msg:"Erro ao carregar lista de usuarios"}];
     }
     if(!prod){
-        prod = [{msg:"Erro ao carregar lista de produtos"}]
+        prod = [{msg:"Erro ao carregar lista de produtos"}];
     }
     if(!fornecedor){
-        fornecedor = [{msg:"Erro ao carregar lista de fornecedores"}]
+        fornecedor = [{msg:"Erro ao carregar lista de fornecedores"}];
+
     }
-    res.render("admin/tela_admin.ejs",{usuario: usuario, prod:prod, fornecedor: fornecedor})    
+    res.render("admin/tela_admin.ejs",{usuario: usuario, prod:prod, fornecedor: fornecedor});
+    return;
 }else{
-    res.redirect("/")
+    res.redirect("/");
+    return;
 }  
     
 }
 
 module.exports.tela_editar_usuario = async function(app, req, res){
-    let tipo_user = req.session.id_tipo
-    if(tipo_user == 1){
-        let id = req.body.id_usuario
-        const con = app.config.con_server;
-        const model_admin = new app.app.models.model_admin(con)
-        const usuario = await model_admin.post_listar_usuario(id)
-    res.render("admin/usuario/editar_user.ejs", {erro : {}, usuario : usuario[0]})
+let tipo_user = req.session.id_tipo;
+if(tipo_user == 1){
+    let id = req.body.id_usuario;
+    const con = app.config.con_server;
+    const model_admin = new app.app.models.model_admin(con);
+    const usuario = await model_admin.post_listar_usuario(id);
+    res.render("admin/usuario/editar_user.ejs", {erro : {}, usuario : usuario[0]});
+    return;
 }else{
-        res.redirect("/")
+    res.redirect("/");
+    return;
 }   
 }
 
 module.exports.tela_editar_fornecedor = async function(app, req, res){
-    let tipo_user = req.session.id_tipo
-    if(tipo_user == 1){
-        let id = req.body.id_usuario
-        const con = app.config.con_server;
-        const model_admin = new app.app.models.model_admin(con)
-        const usuario = await model_admin.listar_fornecedor(id)
-    res.render("admin/usuario/editar_user.ejs", {erro : {}, usuario : usuario[0]})
+let tipo_user = req.session.id_tipo
+if(tipo_user == 1){
+    let id = req.body.id_usuario;
+    const con = app.config.con_server;
+    const model_admin = new app.app.models.model_admin(con);
+    const usuario = await model_admin.listar_fornecedor(id);
+    res.render("admin/usuario/editar_forn.ejs", {erro : {}, usuario : usuario[0]});
+    return;
 }else{
-        res.redirect("/")
+    res.redirect("/");
+    return;
 }   
 }
 
-module.exports.tela_cadastrar_prod = async function(app, req, res){
-let tipo_user = req.session.id_tipo
-if(tipo_user == 1){
-    const con = app.config.con_server;
-    const model_admin = new app.app.models.model_admin(con);
-    let fornecedor = await model_admin.listar_fornecedores();
-    if(!fornecedor){
-        fornecedor = [{msg:"Erro ao carregar lista de fornecedores"}];
-        res.render("admin/cadastrar_produto.ejs", {erro:{},  prod: {}, fornecedor: fornecedor}) 
+module.exports.tela_cadastrar_usuario = async function(app, req, res){
+    let tipo_user = req.session.id_tipo;
+    if(tipo_user == 1){
+        res.render("admin/usuario/cadastrar_user.ejs",{erro: {}, usuario:{}})
     }else{
-        res.render("admin/cadastrar_produto.ejs",{erro:{},  prod: {}, fornecedor: fornecedor})        
-    }
+        res.redirect("/");
+        return;
+    }  
+}
 
+module.exports.tela_cadastrar_fornecedor = async function(app, req, res){
+let tipo_user = req.session.id_tipo;
+if(tipo_user == 1){
+    res.render("admin/fornecedor/cadastrar_forn.ejs",{erro: {}, usuario:{}})
 }else{
-    res.redirect("/")
+    res.redirect("/");
+    return;
+}  
+}
+
+module.exports.tela_cadastrar_prod = async function(app, req, res){
+    let tipo_user = req.session.id_tipo;
+    if(tipo_user == 1){
+        const con = app.config.con_server;
+        const model_admin = new app.app.models.model_admin(con);
+        let fornecedor = await model_admin.listar_fornecedores();
+        if(!fornecedor){
+            fornecedor = [{msg:"Erro ao carregar lista de fornecedores"}];
+            res.render("admin/cadastro_produtrar.ejs", {erro:{},  prod: {}, fornecedor: fornecedor});
+        return;
+        }else{
+            res.render("admin/cadastro_produtrar.ejs",{erro:{},  prod: {}, fornecedor: fornecedor});   
+    return;     
+    }
+}else{
+    res.redirect("/");
+    return;
 }  
 }
 
 module.exports.cadastrar_user = async function(app, req, res){
-let tipo_user = req.session.id_tipo
+let tipo_user = req.session.id_tipo;
 if(!tipo_user == "1"){
-    const dados = req.body
+    const dados = req.body;
     const con = app.config.con_server;
-    const model_user = new app.app.models.model_user(con)
-    const model_admin = new app.app.models.model_admin(con)
+    const model_user = new app.app.models.model_user(con);
+    const model_admin = new app.app.models.model_admin(con);
     req.assert("nome", "Voce deve preencher o nome").notEmpty();
     req.assert("email", "Voce deve preencher o email").notEmpty();
     req.assert("senha", "Voce deve preencher o senha").notEmpty();
@@ -85,8 +114,8 @@ if(!tipo_user == "1"){
     }    
     let email = await model_user.post_user_by_email(dados.email);
     if(email.length != 0){
-        email = [{msg:"Email já está sendo ultilizado"}]
-        usuario = [{msg:"Email já está sendo ultilizado"}]
+        email = [{msg:"Email já está sendo ultilizado"}];
+        usuario = [{msg:"Email já está sendo ultilizado"}];
         res.render("user/cadastrar_user.ejs", {erro:email, usuario:dados});
         return;
     }else{
@@ -105,8 +134,8 @@ if(!tipo_user == "1"){
 }
 }
 
-module.exports.alterar_user = async function(app, req, res){
-let tipo_user = req.session.id_tipo
+module.exports.alterar_usuario = async function(app, req, res){
+let tipo_user = req.session.id_tipo;
 if(tipo_user == "1"){
     const dados = req.body;
     const con = app.config.con_server;
@@ -121,8 +150,8 @@ if(tipo_user == "1"){
         }else{
             let email = await model_user.post_user_by_email(dados.email);
             if(email.length != 0){
-                email = [{msg:"Email já está sendo ultilizado"}]
-                usuario = [{msg:"Email já está sendo ultilizado"}]
+                email = [{msg:"Email já está sendo ultilizado"}];
+                usuario = [{msg:"Email já está sendo ultilizado"}];
                 res.render("user/editar_user.ejs", {erro:email, usuario:dados});
                 return;
             }else{
@@ -131,21 +160,24 @@ if(tipo_user == "1"){
                 res.redirect("/administrador");
                 return;
                 }else{
-                    alterar = [{msg:"Erro ao alterar dados"}]
+                    alterar = [{msg:"Erro ao alterar dados"}];
+                    res.render("user/editar_user.ejs", {erro:alterar, usuario:dados});
+                    return;
                 }
             }  
         }
 }else{
-    res.redirect("/")
+    res.redirect("/");
+    return;
 }
 }
 
 module.exports.cadastrar_fornecedor = async function(app, req, res){
-let tipo_user = req.session.id_tipo
+let tipo_user = req.session.id_tipo;
 if(!tipo_user == "1"){
-    const dados = req.body
+    const dados = req.body;
     const con = app.config.con_server;
-    const model_admin = new app.app.models.model_admin(con)
+    const model_admin = new app.app.models.model_admin(con);
     req.assert("nome", "Voce deve preencher o nome").notEmpty();
     req.assert("email", "Voce deve preencher o email").notEmpty();
     req.assert("cnpj", "Voce deve preencher o senha").notEmpty();
@@ -157,7 +189,7 @@ if(!tipo_user == "1"){
     }    
     let email = await model_admin.email(dados.email);
     if(email.length != 0){
-        email = [{msg:"Email já está sendo ultilizado"}]
+        email = [{msg:"Email já está sendo ultilizado"}];
         res.render("user/cadastrar_user.ejs", {erro:email, usuario:email});
         return;
     }else{
@@ -168,16 +200,16 @@ if(!tipo_user == "1"){
         }else{
             desvio = [{msg:"Erro ao cadastrar produto"}];
             res.render("admin/cadastrar_produto.ejs",{erro:desvio, usuario:dados});
-            return;
+        return;
         } 
     }
 }else{
-    res.redirect("/")
+    res.redirect("/");
 }
 }
 
-module.exports.alterar_user = async function(app, req, res){
-let tipo_user = req.session.id_tipo
+module.exports.alterar_forncedor = async function(app, req, res){
+let tipo_user = req.session.id_tipo;
 if(tipo_user == "1"){
     const dados = req.body;
     const con = app.config.con_server;
@@ -192,7 +224,7 @@ if(tipo_user == "1"){
         }else{
             let email = await model_admin._email(dados.email);
             if(email.length != 0){
-                email = [{msg:"Email já está sendo ultilizado"}]
+                email = [{msg:"Email já está sendo ultilizado"}];
                 res.render("user/editar_user.ejs", {erro:email, usuario:email});
                 return;
             }else{
@@ -201,22 +233,25 @@ if(tipo_user == "1"){
                 res.redirect("/administrador");
                 return;
             }else{
-                    alterar = [{msg:"Erro ao alterar dados"}]
+                alterar = [{msg:"Erro ao alterar dados"}];
+                res.render("user/editar_forn.ejs", {erro:alterar, usuario:dados});
+                return;
             }
         }  
     }
 }else{
-    res.redirect("/")
+    res.redirect("/");
+    return;
 }
 }
 
-module.exports.cadastrar_user = async function(app, req, res){
-let tipo_user = req.session.id_tipo
+module.exports.cadastrar_produto = async function(app, req, res){
+let tipo_user = req.session.id_tipo;
 if(!tipo_user == "1"){
-    const dados = req.body
+    const dados = req.body;
     const con = app.config.con_server;
-    const model_admin = new app.app.models.model_admin(con)
-    const model_cardapio = new app.app.models.model_cardapio(con)
+    const model_admin = new app.app.models.model_admin(con);
+    const model_cardapio = new app.app.models.model_cardapio(con);
     req.assert("descr", "Voce deve preencher o nome").notEmpty();
     req.assert("preco", "Voce deve preencher o preço").notEmpty();
     req.assert("fornecedor", "Voce deve preencher o campo de fornecedor").notEmpty();
@@ -232,7 +267,7 @@ if(!tipo_user == "1"){
             return;       
         }
     }
-    let produto = await model_cardapio.cadastrar_prod(dados) 
+    let produto = await model_cardapio.cadastrar_prod(dados) ;
     if(produto){
         res.redirect("/administrador")
         return;
