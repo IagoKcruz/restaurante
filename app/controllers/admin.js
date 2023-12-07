@@ -54,7 +54,7 @@ if(tipo_user == "1"){
     let email = await model_user.post_user_by_email(dados.email);
     if(email.length != 0){
         email = [{msg:"Email já está sendo ultilizado"}];
-        res.render("admin/usuario/cadastrar_user.ejs", {erro:email[0], usuario:dados});
+        res.render("admin/usuario/cadastrar_user.ejs", {erro:email, usuario:dados});
         return;
     }else{
         let cadastrar = await model_admin.cadastrar_user(dados);
@@ -203,7 +203,7 @@ if(tipo_user == "1"){
             let email = await model_admin._email(dados.email);
             if(email.length != 0){
                 email = [{msg:"Email já está sendo ultilizado"}];
-                res.render("user/editar_user.ejs", {erro:email[0], usuario:email});
+                res.render("user/editar_user.ejs", {erro:email, usuario:email});
                 return;
             }else{
                 let alterar = await model_admin.update_fornecedor(dados);

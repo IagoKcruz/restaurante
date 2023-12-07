@@ -9,11 +9,12 @@
     <header>
         <h1>Cadastrar</h1>
         <%- include("../../../public/menu_admin/menus.html") %>
-        <% if(erro[0]){ %>
-            <ul>
-               <li><%= erro[0].msg %></li> 
+        <% if(erro){ %>
+            <ul><% for(let i = 0; i < erro.length; i++ ){%>
+               <li><%= erro[i].msg %></li> 
                 <% } %>
             </ul>
+        <% } %>
     </header>
     <main>
         <form action="/cad_usuario" method="post">
