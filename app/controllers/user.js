@@ -44,13 +44,14 @@ if(tipo_user){
     let id = req.session.id_usuario 
     const con = app.config.con_server;
     const model_user = new app.app.models.model_admin(con)
-    const d_usuario = await model_user.post_listar_usuario(id)
-    if(d_usuario != 0){
-        //verificar se deu certo
+    let d_usuario = await model_user.post_listar_usuario(id)
+    if(!d_usuario){
         d_usuario = [{msg:"Erro ao carregar lista de usuários"}]
-        res.render("admin/usuario/editar_user.ejs", {erro : d_usuario, usuario : {}});
+        res.render("user/page_user.ejs", {erro : d_usuario, usuario :{}});
+    }else{
+        res.render("user/page_user.ejs", {erro : {}, usuario : d_usuario[0]})    
     }
-    res.render("user/page_user.ejs", {erro : {}, usuario : d_usuario[0]})
+
 }else{
     res.redirect("/")
 }

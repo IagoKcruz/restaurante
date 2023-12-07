@@ -59,15 +59,14 @@ if(tipo_user == "1"){
         return;
     }else{
         let cadastrar = await model_admin.cadastrar_user(dados);
-        if(cadastrar){
-            res.redirect("/administrador");
-        return;
-        }else{
+        console.log(cadastrar)
+        if(!cadastrar){
             desvio = [{msg:"Erro ao cadastrar usuario"}];
             res.render("admin/usuario/cadastrar_user.ejs",{erro:desvio, usuario:dados});
-        return;
+        }else{
+            res.redirect("/administrador");
+
         }  
-        //verificar o que retorna um insert
     }
 }else{
     res.redirect("/")
@@ -81,8 +80,7 @@ module.exports.tela_editar_usuario = async function(app, req, res){
         const con = app.config.con_server;
         const model_admin = new app.app.models.model_admin(con);
         const usuario = await model_admin.post_listar_usuario(id);
-        if(usuario != 0){
-            //verificar se deu certo
+        if(!usuario){
             usuario = [{msg:"Erro ao carregar lista de usuários"}]
             res.render("admin/usuario/editar_user.ejs", {erro : usuario, usuario : {}});
         }
@@ -116,13 +114,11 @@ if(tipo_user == "1"){
                 return;
             }else{
                 let alterar = await model_admin.update_user(dados);
-                if(alterar){
-                res.redirect("/administrador");
-                return;
-                }else{
+                if(!alterar){
                     alterar = [{msg:"Erro ao alterar dados"}];
-                    res.render("admin/usuario/editar_user.ejs", {erro:alterar[0], usuario:dados});
-                    return;
+                    res.render("admin/usuario/editar_user.ejs", {erro:alterar, usuario:dados});
+                }else{
+                    res.redirect("/administrador");
                 }
             }  
         }
@@ -165,13 +161,11 @@ if(tipo_user == "1"){
     }else{
         console.log("cheguei aqui")
         let cadastrar = await model_admin.cadastrar_fornecedor(dados);
-        if(cadastrar){
-            res.redirect("/administrador");
-        return;
-        }else{
+        if(!cadastrar){
             desvio = [{msg:"Erro ao cadastrar produto"}];
             res.render("admin/fornecedor/cadastrar_forn.ejs",{erro:desvio[0], fornecedor:dados});
-        return;
+        }else{
+            res.redirect("/administrador");
         } 
     }
 }else{
@@ -186,8 +180,7 @@ if(tipo_user == 1){
     const con = app.config.con_server;
     const model_admin = new app.app.models.model_admin(con);
     const usuario = await model_admin.listar_fornecedores(id);
-    if(usuario != 0){
-        //verificar se deu certo
+    if(!usuario){
         usuario = [{msg:"Erro ao carregar lista de usuários"}]
         res.render("admin/usuario/editar_user.ejs", {erro : usuario, usuario : {}});
     }
@@ -220,14 +213,14 @@ if(tipo_user == "1"){
                 return;
             }else{
                 let alterar = await model_admin.update_fornecedor(dados);
-                if(alterar){
-                res.redirect("/administrador");
-                return;
-            }else{
-                alterar = [{msg:"Erro ao alterar dados"}];
-                res.render("user/editar_forn.ejs", {erro:alterar, usuario:dados});
-                return;
-            }
+                if(!alterar){
+                    alterar = [{msg:"Erro ao alterar dados"}];
+                    res.render("user/editar_forn.ejs", {erro:alterar, usuario:dados});
+                    return;
+                }else{
+                    res.redirect("/administrador");
+                    return;
+                }
         }  
     }
 }else{
@@ -279,10 +272,7 @@ if(tipo_user == "1"){
         }
     }
     let produto = await model_cardapio.cadastrar_prod(dados);
-    if(produto){
-        res.redirect("/administrador")
-          
-    }else{
+    if(!produto){
         desvio = [{msg:"Erro ao alterar produto"}];
         let fornecedor = await model_admin.listar_fornecedores();    
         if(!fornecedor){
@@ -293,6 +283,8 @@ if(tipo_user == "1"){
             res.render("admin/produtos/editar_prod.ejs",{erro:desvio, prod:dados, fornecedor: fornecedor});
             return;       
         }
+    }else{
+        res.redirect("/administrador") 
     }
 }else{
     res.redirect("/")
@@ -347,10 +339,7 @@ if(tipo_user == "1"){
         }
     }
     let produto = await model_cardapio.alterar_prod(dados) ;
-    if(produto){
-        res.redirect("/administrador")
-        return;
-    }else{
+    if(!produto){
         desvio = [{msg:"Erro ao alterar produto"}];
         let fornecedor = await model_admin.listar_fornecedores();    
         if(!fornecedor){
@@ -361,6 +350,10 @@ if(tipo_user == "1"){
             res.render("admin/produtos/editar_prod.ejs",{erro:desvio, prod:dados, fornecedor: fornecedor});
             return;       
         }
+
+    }else{
+        res.redirect("/administrador")
+        return;
     }
 }else{
     res.redirect("/");
