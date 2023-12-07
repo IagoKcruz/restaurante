@@ -187,13 +187,16 @@ if(tipo_user == 1){
     let id = req.body.id_fornecedor;
     const con = app.config.con_server;
     const model_admin = new app.app.models.model_admin(con);
-    const usuario = await model_admin.listar_fornecedores(id);
-    if(!usuario){
-        usuario = [{msg:"Erro ao carregar lista de usuários"}]
-        res.render("admin/usuario/editar_forn.ejs", {erro : usuario, usuario : {}});
+    let fornecedor = await model_admin.select_fornecedor(id);
+    console.log(fornecedor)
+    if(!fornecedor){
+        let desvio = [{msg:"Erro ao carregar lista de fornecedores"}]
+        res.render("admin/fornecedor/editar_forn.ejs", {erro: desvio, usuario: {}});
+    }else{
+        res.render("admin/fornecedor/editar_forn.ejs", {erro : {}, usuario : fornecedor[0]});
+        return;   
     }
-    res.render("admin/fornecedor/editar_forn.ejs", {erro : {}, usuario : usuario[0]});
-    return;
+
 }else{
     res.redirect("/");
     return;

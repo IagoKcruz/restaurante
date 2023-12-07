@@ -68,7 +68,7 @@ if(tipo_user){
     if(d_usuario != 0){
         //verificar se deu certo
         d_usuario = [{msg:"Erro ao carregar lista de usuários"}]
-        res.render("admin/usuario/editar_user.ejs", {erro : d_usuario, usuario : {}});
+        res.render("user/editar_user.ejs", {erro : d_usuario, usuario : {}});
     }
     res.render("user/alterar.ejs", {erro : {}, usuario : d_usuario[0]})
 }else{
