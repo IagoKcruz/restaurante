@@ -24,7 +24,7 @@
                     <label for="preco">Preço</label>
                     <input type="text" name="preco" id="preco" value="<%= prod[0].preco%>">
                     <select name="fornecedor" id="fornecedor">
-                        <option selected hidden></option>
+                        <option value=""></option>
                         <% if(fornecedor[0].msg){%>
                             <%= fornecedor[0].msg%>
                             <% }else{ %>

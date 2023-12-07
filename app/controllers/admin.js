@@ -46,7 +46,7 @@ if(tipo_user == "1"){
     req.assert("email", "Voce deve preencher o email").notEmpty();
     req.assert("senha", "Voce deve preencher o senha").notEmpty();
     req.assert("senha", "O campo senha deve conter maid de 8 digitos").len(8, 32);
-    req.assert("tipo_usuario", "Voce deve preencher o campo do tipo de usuario").notEmpty();
+    req.assert("id_tipo_usuario", "Voce deve preencher o campo do tipo de usuario").notEmpty();
     let desvio = req.validationErrors();
     if(desvio){
         res.render("admin/usuario/cadastrar_user.ejs", {erro:desvio, usuario:dados});
@@ -97,16 +97,16 @@ if(tipo_user == "1"){
     const model_admin = new app.app.models.model_admin(con);
     req.assert("nome", "Voce deve preencher o nome").notEmpty();
     req.assert("email", "Voce deve preencher o email").notEmpty();
-    req.assert("tipo_usuario", "Voce deve preencher o campo do tipo de usuario").notEmpty();
+    req.assert("id_tipo_usuario", "Voce deve preencher o campo do tipo de usuario").notEmpty();
     let desvio = req.validationErrors();
         if(desvio){
-            res.render("user/alterar.ejs", {erro:desvio, usuario:dados});
+            res.render("admin/usuario/editar_user.ejs", {erro:desvio, usuario:dados});
             return;
         }else{
             let email = await model_user.post_user_by_email(dados.email);
             if(email.length != 0){
                 email = [{msg:"Email já está sendo ultilizado"}];
-                res.render("user/editar_user.ejs", {erro:email, usuario:dados});
+                res.render("admin/usuario/editar_user.ejs", {erro:email, usuario:dados});
                 return;
             }else{
                 let alterar = await model_admin.update_user(dados);
@@ -115,7 +115,7 @@ if(tipo_user == "1"){
                 return;
                 }else{
                     alterar = [{msg:"Erro ao alterar dados"}];
-                    res.render("user/editar_user.ejs", {erro:alterar[0], usuario:dados});
+                    res.render("admin/usuario/editar_user.ejs", {erro:alterar[0], usuario:dados});
                     return;
                 }
             }  
@@ -292,11 +292,13 @@ module.exports.tela_editar_prod = async function(app, req, res){
 let tipo_user = req.session.id_tipo
 if(tipo_user == 1){
     const id = req.body.id_prod;
+    console.log(id)
     const con = app.config.con_server;
     const model_admin = new app.app.models.model_admin(con);
     const model_cardapio = new app.app.models.model_cardapio(con);
     let fornecedor = await model_admin.listar_fornecedores();
-    let prod = await model_cardapio.post_listar_produto(id)
+    let prod = await model_cardapio.post_listar_produto(id);
+    console.log(prod)
     if(!fornecedor){
         fornecedor = [{msg:"Erro ao carregar lista de fornecedores"}];
         res.render("admin/produtos/editar_produto.ejs", {erro:{}, prod: prod, fornecedor: fornecedor[0]});
