@@ -46,6 +46,7 @@ if(tipo_user == "1"){
     req.assert("email", "Voce deve preencher o email").notEmpty();
     req.assert("senha", "Voce deve preencher o senha").notEmpty();
     req.assert("senha", "O campo senha deve conter maid de 8 digitos").len(8, 32);
+    req.assert("tipo_usuario", "Voce deve preencher o campo do tipo de usuario").notEmpty();
     let desvio = req.validationErrors();
     if(desvio){
         res.render("admin/usuario/cadastrar_user.ejs", {erro:desvio, usuario:dados});
@@ -96,6 +97,7 @@ if(tipo_user == "1"){
     const model_admin = new app.app.models.model_admin(con);
     req.assert("nome", "Voce deve preencher o nome").notEmpty();
     req.assert("email", "Voce deve preencher o email").notEmpty();
+    req.assert("tipo_usuario", "Voce deve preencher o campo do tipo de usuario").notEmpty();
     let desvio = req.validationErrors();
         if(desvio){
             res.render("user/alterar.ejs", {erro:desvio, usuario:dados});
