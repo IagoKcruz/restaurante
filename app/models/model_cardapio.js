@@ -17,14 +17,14 @@ produto.prototype.post_listar_produto = function(id, callback){
 }
 produto.prototype.cadastrar_prod = function(dados, callback){
     return new Promise((resolve, rejects)=>{
-        this._con.query(`INSERT INTO produto ?`, dados, function(erros,result){
+        this._con.query(`INSERT INTO produto set ?`, dados, function(erros,result){
             resolve(result)
         })
     })
 }
 produto.prototype.alterar_prod = function(dados, callback){
     return new Promise((resolve, rejects)=>{
-        this._con.query(`UPDATE produto SET descr = '${dados.descr}', preco = ${dados.preco}, id_fornecedor = ${dados.fornecedor} WHERE id = ${dados.id}`, function(erros,result){
+        this._con.query(`UPDATE produto SET descr = '${dados.descr}', preco = ${dados.preco}, id_fornecedor = '${dados.fornecedor}' WHERE id = '${dados.id}'`, function(erros,result){
             resolve(result)
         })
     })

@@ -92,9 +92,20 @@ if(tipo_user){
     }else{
         let email = await model_user.post_user_by_email(dados.email);
         if(email.length != 0){
-            email = [{msg:"Email já está sendo ultilizado"}]
-            res.render("user/alterar.ejs", {erro:email, usuario:dados});
-            return;
+            if(email[0].email == dados.email){
+                let alterar = await model_user.post_update_user(dados, id);
+                if(alterar){
+                res.redirect("/page_usuario");
+                return;
+                }else{
+                    alterar = [{msg:"Erro ao alterar dados"}]
+                    res.render("user/alterar.ejs", {erro:alterar, usuario:dados});
+                }
+            }else{
+                    email = [{msg:"Email já está sendo ultilizado"}]
+                res.render("user/alterar.ejs", {erro:email, usuario:dados});
+                return;
+            }
         }else{
             let alterar = await model_user.post_update_user(dados, id);
             if(alterar){

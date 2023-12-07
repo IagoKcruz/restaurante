@@ -59,7 +59,6 @@ if(tipo_user == "1"){
         return;
     }else{
         let cadastrar = await model_admin.cadastrar_user(dados);
-        console.log(cadastrar)
         if(!cadastrar){
             desvio = [{msg:"Erro ao cadastrar usuario"}];
             res.render("admin/usuario/cadastrar_user.ejs",{erro:desvio, usuario:dados});
@@ -109,9 +108,20 @@ if(tipo_user == "1"){
         }else{
             let email = await model_user.post_user_by_email(dados.email);
             if(email.length != 0){
+                if(email[0].email == dados.email){
+                    let alterar = await model_admin.update_user(dados);
+                    if(!alterar){
+                        alterar = [{msg:"Erro ao alterar dados"}];
+                        res.render("admin/usuario/editar_user.ejs", {erro:alterar, usuario:dados});
+                    }else{
+                        res.redirect("/administrador");
+                    }
+                }else{
                 email = [{msg:"Email já está sendo ultilizado"}];
                 res.render("admin/usuario/editar_user.ejs", {erro:email, usuario:dados});
-                return;
+                return;                    
+                }
+
             }else{
                 let alterar = await model_admin.update_user(dados);
                 if(!alterar){
@@ -154,12 +164,10 @@ if(tipo_user == "1"){
         return;
     }    
     let _email = await model_admin.select_email(dados.email);
-    console.log(_email)
     if(_email.length != 0){
         _email = [{msg:"Email já está sendo ultilizado"}];
         res.render("admin/fornecedor/cadastrar_forn.ejs", {erro:_email, fornecedor:dados});
     }else{
-        console.log("cheguei aqui")
         let cadastrar = await model_admin.cadastrar_fornecedor(dados);
         if(!cadastrar){
             desvio = [{msg:"Erro ao cadastrar produto"}];
@@ -182,7 +190,7 @@ if(tipo_user == 1){
     const usuario = await model_admin.listar_fornecedores(id);
     if(!usuario){
         usuario = [{msg:"Erro ao carregar lista de usuários"}]
-        res.render("admin/usuario/editar_user.ejs", {erro : usuario, usuario : {}});
+        res.render("admin/usuario/editar_forn.ejs", {erro : usuario, usuario : {}});
     }
     res.render("admin/fornecedor/editar_forn.ejs", {erro : {}, usuario : usuario[0]});
     return;
@@ -203,19 +211,31 @@ if(tipo_user == "1"){
     req.assert("cnpj", "Voce deve preencher o senha").notEmpty();
     let desvio = req.validationErrors();
         if(desvio){
-            res.render("user/alterar.ejs", {erro:desvio, usuario:dados});
+            res.render("admin/fornecedor/alterar.ejs", {erro:desvio, usuario:dados});
             return;
         }else{
-            let email = await model_admin._email(dados.email);
+            let email = await model_admin.select_email(dados.email);
             if(email.length != 0){
-                email = [{msg:"Email já está sendo ultilizado"}];
-                res.render("user/editar_user.ejs", {erro:email, usuario:email});
-                return;
+                if(email[0].email == dados.email){
+                    let alterar = await model_admin.update_fornecedor(dados);
+                    if(!alterar){
+                        alterar = [{msg:"Erro ao alterar dados"}];
+                        res.render("admin/fornecedor/editar_forn.ejs", {erro:alterar, usuario:dados});
+                        return;
+                    }else{
+                        res.redirect("/administrador");
+                        return;
+                    }
+                }else{
+                    email = [{msg:"Email já está sendo ultilizado"}];
+                    res.render("admin/fornecedor/editar_forn.ejs", {erro:email, usuario:dados});
+                    return;                    
+                }
             }else{
                 let alterar = await model_admin.update_fornecedor(dados);
                 if(!alterar){
                     alterar = [{msg:"Erro ao alterar dados"}];
-                    res.render("user/editar_forn.ejs", {erro:alterar, usuario:dados});
+                    res.render("admin/fornecedor/editar_forn.ejs", {erro:alterar, usuario:dados});
                     return;
                 }else{
                     res.redirect("/administrador");
@@ -258,7 +278,7 @@ if(tipo_user == "1"){
     const model_cardapio = new app.app.models.model_cardapio(con);
     req.assert("descr", "Voce deve preencher o nome").notEmpty();
     req.assert("preco", "Voce deve preencher o preço").notEmpty();
-    req.assert("fornecedor", "Voce deve preencher o campo de fornecedor").notEmpty();
+    req.assert("id_fornecedor", "Voce deve preencher o campo de fornecedor").notEmpty();
     let desvio = req.validationErrors();
     if(desvio){
         let fornecedor = await model_admin.listar_fornecedores();    
@@ -273,14 +293,14 @@ if(tipo_user == "1"){
     }
     let produto = await model_cardapio.cadastrar_prod(dados);
     if(!produto){
-        desvio = [{msg:"Erro ao alterar produto"}];
+        desvio = [{msg:"Erro ao cadastrar produto"}];
         let fornecedor = await model_admin.listar_fornecedores();    
         if(!fornecedor){
             fornecedor = [{msg:"Erro ao carregar lista de fornecedores"}];
-            res.render("admin/produtos/editar_prod.ejs", {erro:desvio, prod:dados, fornecedor: fornecedor});
+            res.render("admin/produtos/cadastrar_produtos.ejs", {erro:desvio, prod:dados, fornecedor: fornecedor});
             return;
         }else{
-            res.render("admin/produtos/editar_prod.ejs",{erro:desvio, prod:dados, fornecedor: fornecedor});
+            res.render("admin/produtos/cadastrar_produtos.ejs",{erro:desvio, prod:dados, fornecedor: fornecedor});
             return;       
         }
     }else{
@@ -295,13 +315,11 @@ module.exports.tela_editar_prod = async function(app, req, res){
 let tipo_user = req.session.id_tipo
 if(tipo_user == 1){
     const id = req.body.id_prod;
-    console.log(id)
     const con = app.config.con_server;
     const model_admin = new app.app.models.model_admin(con);
     const model_cardapio = new app.app.models.model_cardapio(con);
     let fornecedor = await model_admin.listar_fornecedores();
     let prod = await model_cardapio.post_listar_produto(id);
-    console.log(prod)
     if(!fornecedor){
         fornecedor = [{msg:"Erro ao carregar lista de fornecedores"}];
         res.render("admin/produtos/editar_produto.ejs", {erro:fornecedor, prod: prod, fornecedor: fornecedor});
@@ -344,10 +362,10 @@ if(tipo_user == "1"){
         let fornecedor = await model_admin.listar_fornecedores();    
         if(!fornecedor){
             fornecedor = [{msg:"Erro ao carregar lista de fornecedores"}];
-            res.render("admin/produtos/editar_prod.ejs", {erro:fornecedor, prod:dados, fornecedor: fornecedor});
+            res.render("admin/produtos/editar_produto.ejs", {erro:fornecedor, prod:dados, fornecedor: fornecedor});
             return;
         }else{
-            res.render("admin/produtos/editar_prod.ejs",{erro:desvio, prod:dados, fornecedor: fornecedor});
+            res.render("admin/produtos/editar_produto.ejs",{erro:desvio, prod:dados, fornecedor: fornecedor});
             return;       
         }
 
