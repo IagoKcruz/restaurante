@@ -3,7 +3,7 @@ function produto (con){
 }
 produto.prototype.post_listar_produtos = function(callback){
     return new Promise((resolve, rejects)=>{
-        this._con.query(`SELECT A.id, A.descr, A.preco, B.nome FROM produto A, fornecedor B WHERE A.id_fornecedor=B.iddsfsd;`, function(erros,result){
+        this._con.query(`SELECT A.id, A.descr, A.preco, B.nome FROM produto A, fornecedor B WHERE A.id_fornecedor=B.id;`, function(erros,result){
             resolve(result)
         })
     })
@@ -11,7 +11,6 @@ produto.prototype.post_listar_produtos = function(callback){
 produto.prototype.post_listar_produto = function(id, callback){
     return new Promise((resolve, rejects)=>{
         this._con.query(`SELECT A.id, A.descr, A.preco, B.nome FROM produto A, fornecedor B WHERE A.id=B.id AND A.id =${id}`, function(erros,result){
-            console.log(result)
             resolve(result)
         })
     })

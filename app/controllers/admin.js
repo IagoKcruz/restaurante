@@ -7,8 +7,6 @@ if(tipo_user == 1){
     let usuario = await model_admin.post_listar_usuarios();
     let prod = await model_cardapio.post_listar_produtos();
     let fornecedor = await model_admin.listar_fornecedores();
-    console.log(usuario) 
-    console.table()
     if(!usuario){
         usuario = [{msg:"Erro ao carregar lista de usuarios"}];
     }
@@ -47,25 +45,25 @@ if(tipo_user == "1"){
     req.assert("nome", "Voce deve preencher o nome").notEmpty();
     req.assert("email", "Voce deve preencher o email").notEmpty();
     req.assert("senha", "Voce deve preencher o senha").notEmpty();
-    //req.assert("senha", "O campo senha deve conter maid de 8 digitos").len(8, 32);
+    req.assert("senha", "O campo senha deve conter maid de 8 digitos").len(8, 32);
     let desvio = req.validationErrors();
     if(desvio){
-        res.render("user/cadastrar.ejs", {erro:desvio, usuario:dados});
+        res.render("admin/usuario/cadastrar_user.ejs", {erro:desvio, usuario:dados});
         return;
     }    
     let email = await model_user.post_user_by_email(dados.email);
     if(email.length != 0){
         email = [{msg:"Email já está sendo ultilizado"}];
-        res.render("user/cadastrar_user.ejs", {erro:email[0], usuario:dados});
+        res.render("admin/usuario/cadastrar_user.ejs", {erro:email[0], usuario:dados});
         return;
     }else{
         let cadastrar = await model_admin.cadastrar_user(dados);
         if(cadastrar){
-            res.redirect("/adiministrador");
+            res.redirect("/administrador");
         return;
         }else{
-            desvio = [{msg:"Erro ao cadastrar produto"}];
-            res.render("admin/cadastrar_produto.ejs",{erro:desvio[0], usuario:dados});
+            desvio = [{msg:"Erro ao cadastrar usuario"}];
+            res.render("admin/usuario/cadastrar_user.ejs",{erro:desvio[0], usuario:dados});
         return;
         }  
     }
@@ -145,24 +143,26 @@ if(tipo_user == "1"){
     req.assert("nome", "Voce deve preencher o nome").notEmpty();
     req.assert("email", "Voce deve preencher o email").notEmpty();
     req.assert("cnpj", "Voce deve preencher o senha").notEmpty();
+    req.assert("cnpj", "O campo senha deve conter maid de 8 digitos").len(11)
     let desvio = req.validationErrors();
     if(desvio){
         res.render("admin/fornecedor/cadastrar_forn.ejs", {erro:desvio, fornecedor:dados});
         return;
     }    
-    let email = await model_admin.email(dados.email);
-    if(email.length != 0){
-        email = [{msg:"Email já está sendo ultilizado"}];
-        res.render("user/fornecedor/cadastrar_user.ejs", {erro:email[0], fornecedor:email[0]});
-        return;
+    let _email = await model_admin.select_email(dados.email);
+    console.log(_email)
+    if(_email.length != 0){
+        _email = [{msg:"Email já está sendo ultilizado"}];
+        res.render("admin/fornecedor/cadastrar_forn.ejs", {erro:_email, fornecedor:dados});
     }else{
+        console.log("cheguei aqui")
         let cadastrar = await model_admin.cadastrar_fornecedor(dados);
         if(cadastrar){
-            res.redirect("/adiministrador");
+            res.redirect("/administrador");
         return;
         }else{
             desvio = [{msg:"Erro ao cadastrar produto"}];
-            res.render("admin/fornecedor/cadastrar_produto.ejs",{erro:desvio[0], fornecedor:dados});
+            res.render("admin/fornecedor/cadastrar_forn.ejs",{erro:desvio[0], fornecedor:dados});
         return;
         } 
     }
@@ -282,7 +282,6 @@ module.exports.tela_editar_prod = async function(app, req, res){
 let tipo_user = req.session.id_tipo
 if(tipo_user == 1){
     const id = req.body.id_prod;
-    console.log(id)
     const con = app.config.con_server;
     const model_admin = new app.app.models.model_admin(con);
     const model_cardapio = new app.app.models.model_cardapio(con);

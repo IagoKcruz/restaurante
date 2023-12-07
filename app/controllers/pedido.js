@@ -40,7 +40,6 @@ if(tipo_user == 2){
     }else{
         let create_pedido = await model_pedido.detalhe_pedido(id, dados);
         if(create_pedido > 0){
-
             create_pedido = [{msg: "Algo deu errado ao adicionar o produto ao carrinho"}]
             res.render("cardapio/cart.ejs", {pedido: create_pedido, prod: create_pedido})
         }else{

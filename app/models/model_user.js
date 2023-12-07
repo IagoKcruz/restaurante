@@ -29,8 +29,7 @@ user.prototype.post_user_by_email = function(dados, callback){
         this._con.query(`SELECT * FROM usuario WHERE email = '${dados.email}'`, function(erros,result){
             resolve(result)
         })
-    })
-    
+    })  
 }   
 module.exports = function(){
     return user;

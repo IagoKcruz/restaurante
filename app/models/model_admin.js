@@ -51,7 +51,8 @@ admin.prototype.select_fornecedor = function(id, callback){
 }
 admin.prototype.cadastrar_fornecedor = function(dados, callback){    
     return new Promise((resolve, rejects)=>{
-        this._con.query(`INSERT INTO fornecedor ?`, dados, function(erros,result){
+        console.log(dados)
+        this._con.query(`INSERT INTO fornecedor set ?`, dados, function(erros,result){
             resolve(result)
         })
     })
@@ -63,6 +64,13 @@ admin.prototype.update_fornecedor = function(dados, callback){
         })
     })
 }
+admin.prototype.select_email = function(dados, callback){
+    return new Promise((resolve, rejects)=>{
+        this._con.query(`SELECT * FROM fornecedor WHERE email = '${dados}'`, function(erros,result){
+            resolve(result)
+        })
+    })  
+}   
 admin.prototype.post_delete_user = function(id, callback){
     this._con.query(`DELETE FROM usuario WHERE id = ${id}`, callback)
 }
