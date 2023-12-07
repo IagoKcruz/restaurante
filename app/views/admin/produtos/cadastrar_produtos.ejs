@@ -26,7 +26,7 @@
                     <select name="fornecedor" id="fornecedor" value="">
                     <option value=""></option>
                     <% if(fornecedor[0].msg){%>
-                    <%= fornecedor[0].msg%>
+                    <p><%= fornecedor[0].msg%></p>
                     <% }else{ %>
                     <%for(let i = 0; fornecedor.length > i; i++){%>
                         <option value="<%= fornecedor[i].id%>"><%= fornecedor[i].nome%></option>
