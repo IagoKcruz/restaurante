@@ -15,7 +15,7 @@ produto.prototype.post_listar_produto = function(id, callback){
         })
     })
 }
-produto.prototype.cadastrar_produto = function(dados, callback){
+produto.prototype.cadastrar_prod = function(dados, callback){
     return new Promise((resolve, rejects)=>{
         this._con.query(`INSERT INTO produto ?`, dados, function(erros,result){
             resolve(result)

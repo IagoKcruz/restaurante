@@ -51,7 +51,7 @@ if(tipo_user == "1"){
         res.render("admin/usuario/cadastrar_user.ejs", {erro:desvio, usuario:dados});
         return;
     }    
-    let email = await model_user.post_user_by_email(dados.email);
+    let email = await model_user.post_user_by_email(dados);
     if(email.length != 0){
         email = [{msg:"Email já está sendo ultilizado"}];
         res.render("admin/usuario/cadastrar_user.ejs", {erro:email, usuario:dados});
@@ -104,7 +104,7 @@ if(tipo_user == "1"){
             let email = await model_user.post_user_by_email(dados.email);
             if(email.length != 0){
                 email = [{msg:"Email já está sendo ultilizado"}];
-                res.render("user/editar_user.ejs", {erro:email[0], usuario:dados});
+                res.render("user/editar_user.ejs", {erro:email, usuario:dados});
                 return;
             }else{
                 let alterar = await model_admin.update_user(dados);
@@ -268,10 +268,18 @@ if(tipo_user == "1"){
     let produto = await model_cardapio.cadastrar_prod(dados);
     if(produto){
         res.redirect("/administrador")
-        return;
+          
     }else{
-        desvio = [{msg:"Erro ao cadastrar produto"}];
-        res.render("admin/produtos/cadastrar_produtos.ejs",{erro:desvio[0], prod:dados, fornecedor: fornecedor});
+        desvio = [{msg:"Erro ao alterar produto"}];
+        let fornecedor = await model_admin.listar_fornecedores();    
+        if(!fornecedor){
+            fornecedor = [{msg:"Erro ao carregar lista de fornecedores"}];
+            res.render("admin/produtos/editar_prod.ejs", {erro:desvio, prod:dados, fornecedor: fornecedor});
+            return;
+        }else{
+            res.render("admin/produtos/editar_prod.ejs",{erro:desvio, prod:dados, fornecedor: fornecedor});
+            return;       
+        }
     }
 }else{
     res.redirect("/")

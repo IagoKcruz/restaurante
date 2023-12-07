@@ -24,10 +24,14 @@
                     <label for="preco">Preço</label>
                     <input type="text" name="preco" id="preco" value="<%= prod.preco%>">
                     <select name="fornecedor" id="fornecedor">
-                        <% for(let i = 0; fornecedor.length > i; i++){%>
-                            <option value="<%= fornecedor[i].id%>"><%= fornecedor[i].nome%></option>
-                        <%}%>
+                    <% if(fornecedor[0].msg){%>
+                    <%= fornecedor[0].msg%>
+                    <% }else{ %>
+                    <%for(let i = 0; fornecedor.length > i; i++){%>
+                        <option value="<%= fornecedor[i].id%>"><%= fornecedor[i].nome%></option>
+                    <%}%>
                     </select>
+                    <%}%>
                     <button type="submit">Cadastrar Produto</button>
                 </form>
                 <a href="/administrador">voltar</a>
