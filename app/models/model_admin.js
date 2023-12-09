@@ -51,7 +51,6 @@ admin.prototype.select_fornecedor = function(id, callback){
 }
 admin.prototype.cadastrar_fornecedor = function(dados, callback){    
     return new Promise((resolve, rejects)=>{
-        console.log(dados)
         this._con.query(`INSERT INTO fornecedor set ?`, dados, function(erros,result){
             resolve(result)
         })
@@ -59,7 +58,7 @@ admin.prototype.cadastrar_fornecedor = function(dados, callback){
 }
 admin.prototype.update_fornecedor = function(dados, callback){
     return new Promise((resolve, rejects)=>{
-        this._con.query(`UPDATE usuario SET nome = '${dados.nome}', email = '${dados.email}', cnpj = ${dados.cnpj} WHERE id = ${dados.id}`, function(erros,result){
+        this._con.query(`UPDATE fornecedor SET nome = '${dados.nome}', email = '${dados.email}', cnpj = ${dados.cnpj} WHERE id = ${dados.id}`, function(erros,result){
             resolve(result)
         })
     })

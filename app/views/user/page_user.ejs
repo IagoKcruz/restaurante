@@ -15,7 +15,11 @@
         <% } %>
     </header>
     <main>
-        
+        <% if(erro){ %>
+        <% for(let i = 0; i < erro.length; i++ ){%>
+        <p><%= erro[i].msg %></p> 
+        <% } %>
+        <% } %>
         <section style="display: flex; flex-direction: column; gap: 10px; margin-top: 30px;">
             <span><%= usuario.nome%></span>
             <span><%= usuario.email%></span>
