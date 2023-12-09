@@ -81,7 +81,7 @@ module.exports.tela_editar_usuario = async function(app, req, res){
         const con = app.config.con_server;
         const model_admin = new app.app.models.model_admin(con);
         const usuario = await model_admin.post_listar_usuario(id);
-        if(usuario != 0){
+        if(!usuario){
             //verificar se deu certo
             usuario = [{msg:"Erro ao carregar lista de usuários"}]
             res.render("admin/usuario/editar_user.ejs", {erro : usuario, usuario : {}});
