@@ -60,13 +60,17 @@ if(tipo_user == 2){
     const con = app.config.con_server;
     const model_pedido = new app.app.models.model_cart(con);
     let aberto = await model_pedido.pedido_aberto(id);
-    if(aberto > 0){
-        aberto = await model_pedido.pedido_aberto(id);
+    console.log(aberto)
+    if(aberto.length == 0){
+        let create = await model_pedido.create_pedido(id); 
+        if(create){
+        aberto = await model_pedido.pedido_aberto(id);            
+        }
     }else{
     let pedido = req.session.id_pedido = aberto[0].id;
         let cart_pedido = await model_pedido.cart_pedido(pedido);
         if(cart_pedido.length <= 0){
-            cart_pedido = [{msg:"Nenhum pedido encontrado"}];
+            cart_pedido = [{msg:"Nenhum produto encontrado"}];
             prod = [{msg:"Nenhum produto encontrado"}];
             render_carrinho(req, res, app, cart_pedido, prod);
             return;
