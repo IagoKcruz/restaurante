@@ -46,7 +46,6 @@ pedido.prototype.unico_produto_cart = function(id, prod, callback){
 pedido.prototype.create_pedido = function(id, callback){
     return new Promise((resolve, rejects)=>{
         this._con.query(`INSERT INTO pedido(id_usuario, id_status) VALUES(${id}, 1)`, function(erros,result){
-            console.log(result)
             resolve(result)
         })
     })
@@ -54,7 +53,6 @@ pedido.prototype.create_pedido = function(id, callback){
 pedido.prototype.detalhe_pedido = function(pedido, dados, callback){
     return new Promise((resolve, rejects)=>{
         this._con.query(`INSERT INTO produto_pedido(id, id_pedido, id_produto, quantidade) VALUES(null, ${pedido}, ${dados.id_prod}, 1);`, function(erros,result){
-            console.log(result)
             resolve(result)
         })
     })

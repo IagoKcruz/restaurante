@@ -47,8 +47,9 @@
             <div>
                 <p>valor total</p>
             </div>
-            <form action="/finalizar">
+            <form action="/listar_pedido" method="post">
                 <input type="hidden" value="sessao_pedido">
+                <input type="hidden" name="cart" value="1">
                 <button type="submit">FINALIZAR</button>
             </form>
         </div>

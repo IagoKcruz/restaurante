@@ -11,4 +11,10 @@ module.exports = function(app){
     app.post('/deletar_item',function(req, res){
         app.app.controllers.pedido.deletar_item_cart(app, req, res)
     })
+    app.post('/listar_pedido',function(req, res){
+        app.app.controllers.pedido.open_cart(app, req, res)
+    })
+    app.post('/finalizar',function(req, res){
+        app.app.controllers.pedido.finalizar(app, req, res)
+    })
 }
