@@ -52,6 +52,44 @@ if(tipo_user == 2){
     
 }
 
+module.exports.editar_item_cart = async function(app, req, res){      
+let tipo_user = req.session.id_tipo
+if(tipo_user == 2){
+    const dados = req.body;
+    const con = app.config.con_server;
+    const model_pedido = new app.app.models.model_cart(con);
+    let update_quant = await model_pedido.quant_cart(dados.pedido, dados.produto, dados.quant);
+    // if(update_quant != 0){
+    //     cart_pedido = [{msg:"Erro ao alterar quantidade"}];
+    //     prod = [{msg:"Erro ao alterar quantidade"}];
+    //     render_carrinho(req, res, app, cart_pedido, prod);
+    // }else{
+    //     res.redirect("/carrinho")               
+    // }
+    if(update_quant){
+        res.redirect("/carrinho")    
+    }    
+}else{
+       res.redirect("/")
+}
+}
+
+module.exports.deletar_item_cart = async function(app, req, res){  
+let tipo_user = req.session.id_tipo
+if(tipo_user == 2){
+    const dados = req.body;
+    const con = app.config.con_server;
+    const model_pedido = new app.app.models.model_cart(con);
+    let delete_quant = await model_pedido.delete_cart(dados.detalhe_pedido, dados.pedido, dados.produto);
+    if(delete_quant){
+        res.redirect("/carrinho")    
+    }
+}else{
+    res.redirect("/")
+} 
+
+}
+
 module.exports.open_cart = async function(app, req, res){      
 let tipo_user = req.session.id_tipo;
 if(tipo_user == 2){
@@ -103,46 +141,3 @@ if(tipo_user == 2){
 }
 }
 
-module.exports.editar_item_cart = async function(app, req, res){      
-let tipo_user = req.session.id_tipo
-if(tipo_user == 2){
-    const dados = req.body;
-    const con = app.config.con_server;
-    const model_pedido = new app.app.models.model_cart(con);
-    let update_quant = await model_pedido.quant_cart(dados.pedido, dados.produto, dados.quant);
-    // if(update_quant != 0){
-    //     cart_pedido = [{msg:"Erro ao alterar quantidade"}];
-    //     prod = [{msg:"Erro ao alterar quantidade"}];
-    //     render_carrinho(req, res, app, cart_pedido, prod);
-    // }else{
-    //     res.redirect("/carrinho")               
-    // }
-    if(update_quant){
-        res.redirect("/carrinho")    
-    }    
-}else{
-       res.redirect("/")
-}
-}
-
-module.exports.deletar_item_cart = async function(app, req, res){  
-let tipo_user = req.session.id_tipo
-if(tipo_user == 2){
-    const dados = req.body;
-    const con = app.config.con_server;
-    const model_pedido = new app.app.models.model_cart(con);
-    let delete_quant = await model_pedido.delete_cart(dados.detalhe_pedido, dados.pedido, dados.produto);
-    // if(delete_quant != 0){
-    //     cart_pedido = [{msg:"Erro ao deletar quantidade"}];
-    //     prod = [{msg:"Erro ao deletar quantidade"}];
-    //     render_carrinho(req, res, app, cart_pedido, prod);
-    // }else{
-    //     res.redirect("/carrinho")               
-    // }
-    if(delete_quant){
-        res.redirect("/carrinho")    
-    }
-}else{
-    res.redirect("/")
-}    
-}
