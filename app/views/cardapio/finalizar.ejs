@@ -11,6 +11,7 @@
         <div id="cart">
             <h2>Seu carrinho tem:</h2>
             <ul style="list-style:none">
+                <% console.log(pedido[0].msg) %>
                 <% if(pedido[0].msg){%>
                     <li><p><%= pedido[0].msg %></p></li>
                     <%}else if(prod[0].msg){%> 
@@ -28,16 +29,15 @@
                     <% } %>
             </ul>
             <div id="status">
-            <% if(status[0].msg){%>
-                    <li><p><%= status[0].msg %></p></li>
+            <% if(status.msg){%>
+                    <li><p><%= status.msg %></p></li>
             <% } %>   
             </div>
             <div>
                 <p>valor total</p>
             </div>
             <form action="/finalizar" method="post">
-                <input type="hidden" value="sessao_pedido">
-                <button type="submit">FINALIZAR</button>
+                <button type="submit">FINALIZAR COMPRA</button>
             </form>
         </div>
     </main>

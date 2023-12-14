@@ -57,13 +57,6 @@ pedido.prototype.detalhe_pedido = function(pedido, dados, callback){
         })
     })
 }
-pedido.prototype.em_andamento = function(pedido, callback){
-    return new Promise((resolve, rejects)=>{
-        this._con.query(`UPDATE pedido SET id_status = 2 WHERE id = ${pedido};`, function(erros,result){
-            resolve(result)
-        })
-    })
-}
 pedido.prototype.alterar_quant = function(pedido, produto, callback){
     return new Promise((resolve, rejects)=>{
         this._con.query(`UPDATE produto_pedido SET quantidade = quantidade + 1 WHERE id_pedido = ${pedido} AND id_produto = ${produto}`, function(erros,result){
@@ -85,7 +78,20 @@ pedido.prototype.delete_cart = function(detalhe_pedido, pedido, produto, callbac
         })
     })
 }
-
+pedido.prototype.em_andamento = function(pedido, usuario, callback){
+    return new Promise((resolve, rejects)=>{
+        this._con.query(`UPDATE pedido SET id_status = 2 WHERE id = ${pedido} AND id_usuario = ${usuario}`, function(erros,result){
+            resolve(result)
+        })
+    })
+}
+pedido.prototype.pedido_em_andamento = function(id, pedido, callback){
+    return new Promise((resolve, rejects)=>{
+        this._con.query(`SELECT * FROM pedido WHERE id_usuario = ${id} AND id_status = 2 AND id = ${pedido} `, function(erros,result){
+            resolve(result)
+        })
+    })
+}
 module.exports = function(){
     return pedido;
 }
