@@ -149,47 +149,20 @@ module.exports.finalizar = async function (app, req, res) {
         let pedido = await model_pedido.pedido_aberto(user);
         if (pedido) {
             const update = await model_pedido.em_andamento(pedido[0].id, pedido[0].id_usuario)
-            console.log(update)
             if (!update) {
                 console.log("não deu")
             } else {
-                console.log("deu certo")
                 let pedido_em_andamento = await model_pedido.pedido_em_andamento(user, pedido[0].id);
-                console.table(pedido_em_andamento)
-                for (let i = 0; pedido_em_andamento.length > i; i++) {
-                    prod[i] = await model_pedido.unico_produto_cart(pedido_em_andamento[i].id, pedido_em_andamento[i].id_produto);
+                cart_pedido = await model_pedido.cart_pedido(pedido_em_andamento[0].id);
+                for (let i = 0; cart_pedido.length > i; i++) {
+                    prod[i] = await model_pedido.unico_produto_cart(pedido_em_andamento[0].id, cart_pedido[i].id_produto);
                 }
-                console.log(pedido_em_andamento[0].msg)
+                console.table("aqui"+cart_pedido)
+                console.table("aqui"+pedido_em_andamento)
                 update_status = [{ msg: "Pedido enviado" }]
-                res.render("cardapio/finalizar.ejs", {pedido: pedido_em_andamento, prod: prod, status: update_status });
+                res.render("cardapio/finalizar.ejs", {pedido: cart_pedido, prod: prod, status: update_status[0] });
             }
         }
-
-        // if(pedido){
-        //     let update_status = model_pedido.em_andamento(pedido[0].id, pedido[0].id_usuario); 
-        //     console.log(update_status)
-        //     if(!update_status){
-        //         let cart_pedido = await model_pedido.cart_pedido(pedido[0].id);
-        //         for(let i=0; cart_pedido.length > i; i++){
-        //             prod[i] = await model_pedido.unico_produto_cart(pedido[0].id, cart_pedido[i].id_produto);
-        //         }
-        //         cart_pedido = await model_pedido.cart_pedido(pedido[0].id);
-        //         update_status = [{msg: "Não foi possível enviar seu pedido"}]
-        //         res.render("cardapio/finalizar.ejs", {pedido: cart_pedido, prod: prod, status: update_status});
-        //         pedido_em_andamento = await model_pedido.pedido_em_andamento(id, pedido[0].id);
-        //     }else{
-        //         let pedido_em_andamento = await model_pedido.pedido_em_andamento(user, pedido[0].id);
-        //         let cart_pedido = await model_pedido.cart_pedido(pedido_em_andamento[0].id);
-        //         for(let i=0; cart_pedido.length > i; i++){
-        //             prod[i] = await model_pedido.unico_produto_cart(pedido_em_andamento[0].id, cart_pedido[i].id_produto);
-        //         }
-        //         cart_pedido = await model_pedido.cart_pedido(pedido_em_andamento[0].id);
-        //         update_status = [{msg: "Pedido enviado"}]
-        //         res.render("cardapio/finalizar.ejs", {pedido: cart_pedido, prod: prod, status: update_status});
-        //     }             
-        // }
-
-
     } else {
         res.redirect("/")
     }

@@ -11,7 +11,6 @@
         <div id="cart">
             <h2>Seu carrinho tem:</h2>
             <ul style="list-style:none">
-                <% console.log(pedido[0].msg) %>
                 <% if(pedido[0].msg){%>
                     <li><p><%= pedido[0].msg %></p></li>
                     <%}else if(prod[0].msg){%> 
@@ -29,8 +28,8 @@
                     <% } %>
             </ul>
             <div id="status">
-            <% if(status.msg){%>
-                    <li><p><%= status.msg %></p></li>
+            <% if(status){%>
+                <p><%= status.msg %></p>
             <% } %>   
             </div>
             <div>
