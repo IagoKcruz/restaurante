@@ -89,6 +89,7 @@ module.exports.open_cart = async function (app, req, res) {
         const carrinho = req.body.cart
         let id = req.session.id_usuario;
         let prod = [];
+        let valor_total = 0;
         const con = app.config.con_server;
         const model_pedido = new app.app.models.model_cart(con);
         let aberto = await model_pedido.pedido_aberto(id);
@@ -103,19 +104,22 @@ module.exports.open_cart = async function (app, req, res) {
             if (cart_pedido.length <= 0) {
                 cart_pedido = [{ msg: "Nenhum produto encontrado" }];
                 prod = [{ msg: "Nenhum produto encontrado" }];
-                render_carrinho(req, res, app, cart_pedido, prod, carrinho);
+                render_carrinho(req, res, app, cart_pedido, prod, valor_total, carrinho);
                 return;
             } else {
+                
                 for (let i = 0; cart_pedido.length > i; i++) {
                     prod[i] = await model_pedido.unico_produto_cart(pedido, cart_pedido[i].id_produto);
+                    valor_total = valor_total + (cart_pedido[i].quantidade * prod[i][0].preco)
                 }
                 cart_pedido = await model_pedido.cart_pedido(pedido);
                 if (prod.length <= 0) {
                     cart_pedido = [{ msg: "Erro ao carregar pedido" }];
                     prod = [{ msg: "Erro ao carregar produto" }];
-                    render_carrinho(req, res, app, cart_pedido, prod, carrinho);
+                    render_carrinho(req, res, app, cart_pedido, prod, valor_total,carrinho);
                 } else {
-                    render_carrinho(req, res, app, cart_pedido, prod, carrinho);
+                    console.log(cart_pedido)
+                    render_carrinho(req, res, app, cart_pedido, prod, valor_total, carrinho);
                 }
             }
         }
@@ -125,15 +129,15 @@ module.exports.open_cart = async function (app, req, res) {
 
 }
 
-async function render_carrinho(req, res, app, cart_pedido, prod, carrinho) {
+async function render_carrinho(req, res, app, cart_pedido, prod, valor_total, carrinho) {
     let tipo_user = req.session.id_tipo;
     if (tipo_user == 2) {
         if (carrinho == 1) {
-            res.render("cardapio/finalizar.ejs", { pedido: cart_pedido, prod: prod, status: {} });
+            console.log(valor_total)
+            res.render("cardapio/finalizar.ejs", { pedido: cart_pedido, prod: prod, status: {}, valor : valor_total });
         } else {
-            res.render("cardapio/cart.ejs", { pedido: cart_pedido, prod: prod });
+            res.render("cardapio/cart.ejs", { pedido: cart_pedido, prod: prod , valor : valor_total});
         }
-
     } else {
         res.redirect("/")
     }
@@ -157,8 +161,6 @@ module.exports.finalizar = async function (app, req, res) {
                 for (let i = 0; cart_pedido.length > i; i++) {
                     prod[i] = await model_pedido.unico_produto_cart(pedido_em_andamento[0].id, cart_pedido[i].id_produto);
                 }
-                console.table("aqui"+cart_pedido)
-                console.table("aqui"+pedido_em_andamento)
                 update_status = [{ msg: "Pedido enviado" }]
                 res.render("cardapio/finalizar.ejs", {pedido: cart_pedido, prod: prod, status: update_status[0] });
             }
