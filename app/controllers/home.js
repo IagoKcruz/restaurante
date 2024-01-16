@@ -13,9 +13,9 @@ module.exports.validar_login = function(app, req, res){
         return;
     }
     model_user.validar(dados, function(erro,result){
-        if(result.length == 0){
-            erro_login = [{msg: "Usuario não encontrado"}]
-            res.render("home/login.ejs", {erro:erro_login,usuario:dados});
+        if(!result){
+            erro_login = [{msg: "Erro no servidor ou erro ao encontrar usuário"}]
+            res.render("home/login.ejs", {erro:erro_login, usuario:dados});
             return;
         }else{
             let sessao = req.session.id_tipo = result[0].id_tipo_usuario 
