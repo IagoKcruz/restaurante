@@ -92,6 +92,46 @@ pedido.prototype.pedido_em_andamento = function(id, pedido, callback){
         })
     })
 }
+//admin aceita
+pedido.prototype.pedido_aceito = function(id, pedido, callback){
+    return new Promise((resolve, rejects)=>{
+        this._con.query(`UPDATE pedido SET id_status = 3 WHERE id = ${pedido}`, function(erros,result){
+            resolve(result)
+        })
+    })
+}
+//admin cancela
+pedido.prototype.pedido_cancelado = function(id, pedido, callback){
+    return new Promise((resolve, rejects)=>{
+        this._con.query(`UPDATE pedido SET id_status = 4 WHERE id = ${pedido}`, function(erros,result){
+            resolve(result)
+        })
+    })
+}
+//admin
+pedido.prototype.pedidos = function(callback){
+    return new Promise((resolve, rejects)=>{
+        this._con.query(`SELECT * FROM pedido`, function(erros,result){
+            resolve(result)
+        })
+    })
+}
+//enviar id
+pedido.prototype.pedidos_usuario = function(id, callback){
+    return new Promise((resolve, rejects)=>{
+        this._con.query(`SELECT * FROM pedido WHERE id_usuario = ${id}`, function(erros,result){
+            resolve(result)
+        })
+    })
+}
+//enviar id e status
+pedido.prototype.pedidos_especificos = function(id, status, callback){
+    return new Promise((resolve, rejects)=>{
+        this._con.query(`SELECT * FROM pedido WHERE id_usuario = ${id} AND status = ${status}`, function(erros,result){
+            resolve(result)
+        })
+    })
+}
 module.exports = function(){
     return pedido;
 }
