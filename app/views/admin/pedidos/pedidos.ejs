@@ -18,6 +18,24 @@
                 <p>STATUS: <%= pedidos[i].status %></p>
                 <p>Quantidade: <%= pedidos[i].quantidade %></p>
                 <p>Valor total: R$<%= pedidos[i].valor %></p>
+                <div id="emaberto">
+                    <form action="/pedido_aberto" method="post">
+                        <input type="hidden" name="action" value="2">
+                        <button type="submit">CANCELAR</button>
+                    </form>
+                </div>
+                <div id="aceitar" method="post">
+                    <form action="pedido_aceito">
+                        <input type="hidden" name="action" value="3">
+                        <button type="submit">FINALIZAR</button>
+                    </form>
+                </div>
+                <div id="cancelar" method="post">
+                    <form action="pedido_cancelado">
+                        <input type="hidden" name="action" value="4">
+                        <button type="submit">CANCELAR</button>
+                    </form>
+                </div>
             </li>
         <% } %>
         </div>
