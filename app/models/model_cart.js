@@ -31,7 +31,7 @@ pedido.prototype.select_pedido_cart = function(id, callback){
 }
 pedido.prototype.cart_pedido = function(id, callback){
     return new Promise((resolve, rejects)=>{
-        this._con.query(`SELECT A.id, A.id_pedido, A.id_produto, A.quantidade FROM produto_pedido A, pedido B WHERE A.id_produto = B.id AND A.id_pedido = ${id}`, function(erros,result){
+        this._con.query(`SELECT A.id, A.id_pedido, A.id_produto, A.quantidade, B.id_status FROM produto_pedido A, pedido B WHERE A.id_produto = B.id AND A.id_pedido = ${id}`, function(erros,result){
             resolve(result)
         })
     })
@@ -128,6 +128,13 @@ pedido.prototype.pedidos_usuario = function(id, callback){
 pedido.prototype.pedidos_especificos = function(id, status, callback){
     return new Promise((resolve, rejects)=>{
         this._con.query(`SELECT * FROM pedido WHERE id_usuario = ${id} AND status = ${status}`, function(erros,result){
+            resolve(result)
+        })
+    })
+}
+pedido.prototype.status = function(id, callback){
+    return new Promise((resolve, rejects)=>{
+        this._con.query(`SELECT * FROM status_pedido WHERE id = ${id}`, function(erros,result){
             resolve(result)
         })
     })

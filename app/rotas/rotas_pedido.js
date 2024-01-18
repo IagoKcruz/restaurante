@@ -17,4 +17,7 @@ module.exports = function(app){
     app.post('/finalizar',function(req, res){
         app.app.controllers.pedido.finalizar(app, req, res)
     })
+    app.get("/pedidos_user",function(req, res){
+        app.app.controllers.pedido.pedidos_usuario(app, req, res)
+    })
 }

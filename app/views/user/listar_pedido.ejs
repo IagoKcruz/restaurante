@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos</title>
+</head>
+<body>
+    <h1>PEDIDOS</h1>
+    <a href="/cardapio">voltar</a>
+    <main>
+        <ul style="list-style:none">
+        <div id="pedidos">
+        <%for(let i=0;i<pedidos.length;i++){%>     
+            <li>
+                <p><%= pedidos[i].descr %></p>
+                <p>R$ <%= pedidos[i].preco %></p>
+                <p>STATUS: <%= pedidos[i].status %></p>
+                <p>Quantidade: <%= pedidos[i].quantidade %></p>
+                <p>Valor total: <%= pedidos[i].valor %></p>
+            </li>
+        <% } %>
+        </div>
+        </ul>
+    </main>
+    
+</body>
+</html>
