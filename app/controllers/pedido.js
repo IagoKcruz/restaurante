@@ -220,9 +220,68 @@ if (tipo_user == 2) {
                     }
                     }
             }
-            res.render("user/listar_pedido",{pedidos:lista_de_pedidos})
-            console.log(lista_de_pedidos)
         }
+        console.log(lista_de_pedidos)
+        res.render("user/listar_pedido",{pedidos:lista_de_pedidos}) 
+    }
+} else {
+    res.redirect("/")
+}   
+}
+
+module.exports.pedidos = async function(app, req, res){
+let tipo_user = req.session.id_tipo;
+if (tipo_user == 1) {
+    let lista_de_pedidos = []
+    let prod = [];
+    let status = [];
+    let valor_total = 0;
+    const con = app.config.con_server;
+    const model_pedido = new app.app.models.model_cart(con);
+    let pedidos = await model_pedido.pedidos();
+    console.log(pedidos)
+    if (!pedidos) {
+        //redirecionar para carrinho
+        pedidos = await model_pedido.pedidos();
+        
+    } else {
+        for(let i = 0; pedidos.length > i; i++){
+            let pedido = pedidos[i].id;
+            let cart_pedido = await model_pedido.cart_pedido(pedido);
+            console.log(cart_pedido)
+            if (cart_pedido.length <= 0) {
+                cart_pedido = [{ msg: "Nenhum produto encontrado" }];
+                prod = [{ msg: "Nenhum produto encontrado" }];
+                return;
+            }else{
+                for (let j = 0; cart_pedido.length > j; j++) {
+                    prod[j] = await model_pedido.unico_produto_cart(pedido, cart_pedido[j].id_produto);
+                    status = await model_pedido.status(cart_pedido[j].id_status);
+                    console.log(status[0].descr)
+                    valor_total = valor_total + (cart_pedido[j].quantidade * prod[j][0].preco)
+                    if (!prod || !status) {
+                    let render_pedido = {
+                        descr : "Erro ao carregar produto",
+                        preco : "Erro ao carregar produto",
+                        status : "Erro ao carregar pedido",
+                        quantidade : "Erro ao carregar pedido",
+                        valor : "Erro ao carregar pedido"
+                    }
+                    lista_de_pedidos.push(render_pedido)
+                    } else {
+                        let render_pedido = {
+                            descr : prod[j][0].descr,
+                            preco : prod[j][0].preco,
+                            status : status[0].descr,
+                            quantidade : cart_pedido[j].quantidade,
+                            valor : valor_total
+                        }
+                        lista_de_pedidos.push(render_pedido)
+                    }
+                }
+            }
+        }   
+        res.render("admin/pedidos/pedidos", {pedidos:lista_de_pedidos})
     }
 } else {
     res.redirect("/")

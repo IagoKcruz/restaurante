@@ -380,3 +380,4 @@ if(tipo_user == "1"){
     return;
 }
 }
+

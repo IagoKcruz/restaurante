@@ -14,10 +14,10 @@
         <%for(let i=0;i<pedidos.length;i++){%>     
             <li>
                 <p><%= pedidos[i].descr %></p>
-                <p>R$ <%= pedidos[i].preco %></p>
+                <p>Preço: R$ <%= pedidos[i].preco %></p>
                 <p>STATUS: <%= pedidos[i].status %></p>
                 <p>Quantidade: <%= pedidos[i].quantidade %></p>
-                <p>Valor total: <%= pedidos[i].valor %></p>
+                <p>Valor total: R$<%= pedidos[i].valor %></p>
             </li>
         <% } %>
         </div>

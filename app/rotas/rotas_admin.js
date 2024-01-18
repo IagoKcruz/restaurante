@@ -44,4 +44,8 @@ module.exports = function(app){
     app.post('/alterar_prod',function(req, res){
         app.app.controllers.admin.alterar_prod(app, req, res)
     })
+
+    app.get('/page_pedidos',function(req, res){
+        app.app.controllers.pedido.pedidos(app, req, res)
+    })
 }
