@@ -13,7 +13,7 @@ module.exports.validar_login = function(app, req, res){
         return;
     }
     model_user.validar(dados, function(erro,result){
-        if(!result){
+        if(result <= 0){
             erro_login = [{msg: "Erro no servidor ou erro ao encontrar usuário"}]
             res.render("home/login.ejs", {erro:erro_login, usuario:dados});
             return;

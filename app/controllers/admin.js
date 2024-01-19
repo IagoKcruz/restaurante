@@ -7,13 +7,13 @@ if(tipo_user == 1){
     let usuario = await model_admin.post_listar_usuarios();
     let prod = await model_cardapio.post_listar_produtos();
     let fornecedor = await model_admin.listar_fornecedores();
-    if(!usuario){
+    if(usuario.length <= 0){
         usuario = [{msg:"Erro ao carregar lista de usuarios"}];
     }
-    if(!prod){
+    if(prod.length <= 0){
         prod = [{msg:"Erro ao carregar lista de produtos"}];
     }
-    if(!fornecedor){
+    if(fornecedor.length <= 0){
         fornecedor = [{msg:"Erro ao carregar lista de fornecedores"}];
     }
     res.render("admin/tela_admin.ejs",{usuario: usuario, prod:prod, fornecedor: fornecedor});
@@ -192,7 +192,8 @@ if(tipo_user == 1){
         let desvio = [{msg:"Erro ao carregar lista de fornecedores"}]
         res.render("admin/fornecedor/editar_forn.ejs", {erro: desvio, usuario: {}});
     }else{
-        res.render("admin/fornecedor/editar_forn.ejs", {erro : {}, usuario : fornecedor[0]});
+
+        res.render("admin/fornecedor/editar_forn.ejs", {erro : {} , usuario : fornecedor[0]});
         return;   
     }
 

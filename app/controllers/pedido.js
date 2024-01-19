@@ -104,6 +104,7 @@ module.exports.open_cart = async function (app, req, res) {
             if (cart_pedido.length <= 0) {
                 cart_pedido = [{ msg: "Nenhum produto encontrado" }];
                 prod = [{ msg: "Nenhum produto encontrado" }];
+                valor_total = [{ msg: "Nenhum produto encontrado" }];
                 render_carrinho(req, res, app, cart_pedido, prod, valor_total, carrinho);
                 return;
             } else {
@@ -118,7 +119,6 @@ module.exports.open_cart = async function (app, req, res) {
                     prod = [{ msg: "Erro ao carregar produto" }];
                     render_carrinho(req, res, app, cart_pedido, prod, valor_total, carrinho);
                 } else {
-                    console.log(cart_pedido)
                     render_carrinho(req, res, app, cart_pedido, prod, valor_total, carrinho);
                 }
             }
@@ -133,7 +133,6 @@ async function render_carrinho(req, res, app, cart_pedido, prod, valor_total, ca
     let tipo_user = req.session.id_tipo;
     if (tipo_user == 2) {
         if (carrinho == 1) {
-            console.log(valor_total)
             res.render("cardapio/finalizar.ejs", { pedido: cart_pedido, prod: prod, status: {}, valor: valor_total });
         } else {
             res.render("cardapio/cart.ejs", { pedido: cart_pedido, prod: prod, valor: valor_total });
@@ -154,7 +153,10 @@ module.exports.finalizar = async function (app, req, res) {
         if (pedido) {
             const update = await model_pedido.em_andamento(pedido[0].id, pedido[0].id_usuario)
             if (!update) {
-                console.log("não deu")
+                cart_pedido = [{ msg: "" }]
+                prod = [{ msg: "" }]
+                update_status = [{ msg: "Erro ao enviar pedido" }]
+                res.render("cardapio/finalizar.ejs", { pedido: cart_pedido, prod: prod, status: update_status[0] });
             } else {
                 let pedido_em_andamento = await model_pedido.pedido_em_andamento(user, pedido[0].id);
                 cart_pedido = await model_pedido.cart_pedido(pedido_em_andamento[0].id);
@@ -179,14 +181,17 @@ module.exports.pedidos_usuario = async function (app, req, res) {
         const con = app.config.con_server;
         const model_pedido = new app.app.models.model_cart(con);
         let pedidos = await model_pedido.pedidos_usuario(id);
-        console.log(pedidos)
         if (!pedidos) {
-            console.log("erro")
+            render_pedido = {
+                id: "Você não possue pedidos",
+                status: "",
+                quantidade: "",
+                valor: ""
+            }
+            lista_de_pedidos.push(render_pedido)
             pedidos = await model_pedido.pedidos_usuario(id);
         } else {
-            console.log(pedidos.length)
             for (let i = 0; i < pedidos.length; i++) {
-                console.log(i)
                 let pedido = req.session.id_pedido = pedidos[i].id;
                 let cart_pedido = await model_pedido.cart_pedido(pedido);
                 if (cart_pedido.length <= 0) {
@@ -196,35 +201,35 @@ module.exports.pedidos_usuario = async function (app, req, res) {
                         valor: "Erro ao carregar pedido"
                     }
                     lista_de_pedidos.push(render_pedido)
-                    res.render("user/listar_pedido", { pedidos: lista_de_pedidos })
                 } else {
                     let status;
                     let quant = 0;
                     let valor_total = 0;
                     for (let j = 0; cart_pedido.length > j; j++) {
                         prod[j] = await model_pedido.unico_produto_cart(pedido, cart_pedido[j].id_produto);
-                        status = cart_pedido[i].descr
-                        valor_total = (cart_pedido[j].quantidade * prod[j][0].preco)
-                        if (!prod || !status) {
-                            let render_pedido = {
-                                status: "Erro ao carregar pedido",
-                                quantidade: "Erro ao carregar pedido",
-                                valor: "Erro ao carregar pedido"
-                            }
-                            lista_de_pedidos.push(render_pedido)
-                            res.render("user/listar_pedido", { pedidos: lista_de_pedidos })
+                        status = cart_pedido[j].descr
+                        quant = quant + cart_pedido[j].quantidade
+                        valor_total = valor_total + (cart_pedido[j].quantidade * prod[j][0].preco)
+                    }
+                    if (!prod || !status) {
+                        render_pedido = {
+                            id: "Erro ao carregar pedido",
+                            status: "Erro ao carregar pedido",
+                            quantidade: "Erro ao carregar pedido",
+                            valor: "Erro ao carregar pedido"
                         }
+                        lista_de_pedidos.push(render_pedido)
+                    }else{
+                        render_pedido = {
+                            id: pedidos[i].id,
+                            status: status,
+                            quantidade: quant,
+                            valor: valor_total
+                        }
+                        lista_de_pedidos.push(render_pedido)                        
                     }
-                    let render_pedido = {
-                        id: pedido,
-                        status: status,
-                        quantidade: quant,
-                        valor: valor_total
-                    }
-                    lista_de_pedidos.push(render_pedido)
                 }
             }
-            console.log(lista_de_pedidos)
             res.render("user/listar_pedido", { pedidos: lista_de_pedidos })
             return;
         }
@@ -237,56 +242,79 @@ module.exports.pedidos_usuario = async function (app, req, res) {
 module.exports.pedidos = async function (app, req, res) {
     let tipo_user = req.session.id_tipo;
     if (tipo_user == 1) {
+        let render_pedido;
         let lista_de_pedidos = []
         let prod = [];
         const con = app.config.con_server;
         const model_pedido = new app.app.models.model_cart(con);
         let pedidos = await model_pedido.pedidos();
         if (!pedidos) {
-            //redirecionar para carrinho
+            render_pedido = {
+                id: "Não existe nenhum pedido",
+                status: "",
+                quantidade: "",
+                valor: ""
+            }
+            lista_de_pedidos.push(render_pedido)
             pedidos = await model_pedido.pedidos();
         } else {
-            for (let i = 0; pedidos.length > i; i++) {
-                let pedido = pedidos[i].id
-                let cart_pedido = await model_pedido.cart_pedido(pedido);
+            for (let i = 0; i < pedidos.length; i++) {
+                let cart_pedido = await model_pedido.cart_pedido(pedidos[i].id);
                 if (cart_pedido.length <= 0) {
-                    let render_pedido = {
+                    render_pedido = {
+                        id: "Erro ao carregar pedido",
                         status: "Erro ao carregar pedido",
                         quantidade: "Erro ao carregar pedido",
                         valor: "Erro ao carregar pedido"
                     }
                     lista_de_pedidos.push(render_pedido)
-                    res.render("user/listar_pedido", { pedidos: lista_de_pedidos })
                 } else {
                     let status;
                     let quant = 0;
                     let valor_total = 0;
                     for (let j = 0; cart_pedido.length > j; j++) {
-                        prod[j] = await model_pedido.unico_produto_cart(pedido, cart_pedido[j].id_produto);
-                        status = cart_pedido[i].descr
+                        prod[j] = await model_pedido.unico_produto_cart(pedidos[i].id, cart_pedido[j].id_produto);
+                        status = cart_pedido[j].descr
                         valor_total = (cart_pedido[j].quantidade * prod[j][0].preco)
-                        if (!prod || !status) {
-                            let render_pedido = {
-                                status: "Erro ao carregar pedido",
-                                quantidade: "Erro ao carregar pedido",
-                                valor: "Erro ao carregar pedido"
-                            }
-                            lista_de_pedidos.push(render_pedido)
-                            res.render("user/listar_pedido", { pedidos: lista_de_pedidos })
+                        quant = quant + cart_pedido[j].quantidade
+                    }
+                    if (!prod || !status) {
+                        render_pedido = {
+                            id: "Erro ao carregar pedido",
+                            status: "Erro ao carregar pedido",
+                            quantidade: "Erro ao carregar pedido",
+                            valor: "Erro ao carregar pedido"
                         }
+                        lista_de_pedidos.push(render_pedido)
+                    }else{
+                        render_pedido = {
+                            id: pedidos[i].id,
+                            status: status,
+                            quantidade: quant,
+                            valor: valor_total
+                        }
+                        lista_de_pedidos.push(render_pedido)                        
                     }
-                    let render_pedido = {
-                        id: pedido,
-                        status: status,
-                        quantidade: quant,
-                        valor: valor_total
-                    }
-                    lista_de_pedidos.push(render_pedido)
+
                 }
             }
-            console.log(lista_de_pedidos)
-            res.render("user/listar_pedido", { pedidos: lista_de_pedidos })
+            res.render("admin/pedidos/pedidos", { pedidos: lista_de_pedidos })
             return;
+        }
+    } else {
+        res.redirect("/")
+    }
+}
+
+module.exports.gerenciar_pedidos = async function (app, req, res) {
+    let tipo_user = req.session.id_tipo
+    if (tipo_user == 1) {
+        const dados = req.body;
+        const con = app.config.con_server;
+        const model_pedido = new app.app.models.model_cart(con);
+        let adm_pedido = await model_pedido.gerenciar(dados.action, dados.pedido);
+        if (adm_pedido) {
+            res.redirect("/page_pedidos")
         }
     } else {
         res.redirect("/")

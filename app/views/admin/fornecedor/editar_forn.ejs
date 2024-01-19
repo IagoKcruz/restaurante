@@ -12,7 +12,7 @@
 
     </header>
     <main>
-        <% if(erro){ %>
+        <% if(erro.length <= 0){ %>
             <ul><% for(let i = 0; i < erro.length; i++ ){%>
                <li><%= erro[i].msg %></li> 
                 <% } %>

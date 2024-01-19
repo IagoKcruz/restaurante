@@ -18,9 +18,9 @@
     <main>
         <form action="/verificar" method="post">
             <label for="email">Usuario</label>
-            <input type="text" name="email" value="">
+            <input type="text" name="email" value="<%=usuario.email %>">
             <label for="senha">Senha</label>
-            <input type="password" name="senha" value="">
+            <input type="password" name="senha" value="<%=usuario.senha %>">
             <button type="submit">Entrar</button>
         </form>
         <a href="../cadastrar">cadastrar usuario</a>

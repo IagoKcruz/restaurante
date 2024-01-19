@@ -31,7 +31,7 @@ pedido.prototype.select_pedido_cart = function(id, callback){
 }
 pedido.prototype.cart_pedido = function(id, callback){
     return new Promise((resolve, rejects)=>{
-        this._con.query(`SELECT A.id, A.id_pedido, A.id_produto, A.quantidade, C.descr FROM produto_pedido A, pedido B, status_pedido C WHERE A.id_produto = B.id AND A.id_pedido = ${id}`, function(erros,result){
+        this._con.query(`SELECT A.id, A.id_pedido, A.id_produto, A.quantidade, C.descr FROM produto_pedido A, pedido B, status_pedido C WHERE A.id_pedido = B.id AND B.id_status = C.id AND A.id_pedido = ${id}`, function(erros,result){
             resolve(result)
         })
     })
@@ -93,21 +93,14 @@ pedido.prototype.pedido_em_andamento = function(id, pedido, callback){
     })
 }
 //admin aceita
-pedido.prototype.pedido_aceito = function(id, pedido, callback){
+pedido.prototype.gerenciar = function(status, pedido, callback){
     return new Promise((resolve, rejects)=>{
-        this._con.query(`UPDATE pedido SET id_status = 3 WHERE id = ${pedido}`, function(erros,result){
+        this._con.query(`UPDATE pedido SET id_status = ${status} WHERE id = ${pedido}`, function(erros,result){
             resolve(result)
         })
     })
 }
-//admin cancela
-pedido.prototype.pedido_cancelado = function(id, pedido, callback){
-    return new Promise((resolve, rejects)=>{
-        this._con.query(`UPDATE pedido SET id_status = 4 WHERE id = ${pedido}`, function(erros,result){
-            resolve(result)
-        })
-    })
-}
+
 //admin
 pedido.prototype.pedidos = function(callback){
     return new Promise((resolve, rejects)=>{

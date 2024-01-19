@@ -48,4 +48,8 @@ module.exports = function(app){
     app.get('/page_pedidos',function(req, res){
         app.app.controllers.pedido.pedidos(app, req, res)
     })
+
+    app.post('/gerenciar_pedido',function(req, res){
+        app.app.controllers.pedido.gerenciar_pedidos(app, req, res)
+    })
 }
