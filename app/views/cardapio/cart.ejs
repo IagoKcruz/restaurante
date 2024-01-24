@@ -16,7 +16,8 @@
                     <%}else if(prod[0].msg){%> 
                     <li><p><%= prod[0].msg %></p></li>
                     <%}else{%>  
-                <%for(let i=0;i<pedido.length;i++){%>                                      
+                <%for(let i=0;i<pedido.length;i++){%> 
+                    <% if(prod[i][0].status_prod == "ATIVO"){ %>                                     
                     <li id="info_prod">
                         <div>
                         <p><%= prod[i][0].descr %></p>
@@ -27,20 +28,21 @@
                             <p><%= pedido[i].quantidade %></p>
                             <input type="hidden" name="pedido" value="<%= pedido[i].id %>">
                             <input type="hidden" name="produto" value="<%= prod[i][0].id %>">
-                            <input type="number" style="width: 50px;" name="quant" min="0" oninput="validity.valid||(value='');" value="<%= pedido[i].quantidade %>">                          
+                            <input type="number" style="width: 50px;" name="quant" min="1" oninput="validity.valid||(value='');" value="<%= pedido[i].quantidade %>">                          
                             <button type="submit" >Alterar quantidade</button>
                         </form>     
                         </div>
                         <div id="excluir">
                             <form action="/deletar_item" method="post">
+                            <input type="hidden" name="quant" value="<%= pedido[i].quantidade %>">
                             <input type="hidden" name="detalhe_pedido" value="<%= pedido[i].id %>">
                             <input type="hidden" name="pedido" value="<%= pedido[i].id_pedido %>">
                             <input type="hidden" name="produto" value="<%= prod[i][0].id %>">                       
                             <button type="submit">X</button>
                             </form>                            
                         </div>
-  
                     </li>
+                    <% } %>
                     <% } %>
                     
             </ul>

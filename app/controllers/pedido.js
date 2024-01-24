@@ -73,7 +73,7 @@ module.exports.deletar_item_cart = async function (app, req, res) {
         const dados = req.body;
         const con = app.config.con_server;
         const model_pedido = new app.app.models.model_cart(con);
-        let delete_quant = await model_pedido.delete_cart(dados.detalhe_pedido, dados.pedido, dados.produto);
+        let delete_quant = await model_pedido.delete_cart(dados.detalhe_pedido, dados.pedido, dados.produto, dados.quant);
         if (delete_quant) {
             res.redirect("/carrinho")
         }
@@ -101,6 +101,7 @@ module.exports.open_cart = async function (app, req, res) {
         } else {
             let pedido = req.session.id_pedido = aberto[0].id;
             let cart_pedido = await model_pedido.cart_pedido(pedido);
+            console.log(cart_pedido)
             if (cart_pedido.length <= 0) {
                 cart_pedido = [{ msg: "Nenhum produto encontrado" }];
                 prod = [{ msg: "Nenhum produto encontrado" }];
@@ -108,9 +109,8 @@ module.exports.open_cart = async function (app, req, res) {
                 render_carrinho(req, res, app, cart_pedido, prod, valor_total, carrinho);
                 return;
             } else {
-
                 for (let i = 0; cart_pedido.length > i; i++) {
-                    prod[i] = await model_pedido.unico_produto_cart(pedido, cart_pedido[i].id_produto);
+                    prod[i] = await model_pedido.unico_produto_cart(pedido, cart_pedido[i].id_produto)
                     valor_total = valor_total + (cart_pedido[i].quantidade * prod[i][0].preco)
                 }
                 cart_pedido = await model_pedido.cart_pedido(pedido);
@@ -219,14 +219,14 @@ module.exports.pedidos_usuario = async function (app, req, res) {
                             valor: "Erro ao carregar pedido"
                         }
                         lista_de_pedidos.push(render_pedido)
-                    }else{
+                    } else {
                         render_pedido = {
                             id: pedidos[i].id,
                             status: status,
                             quantidade: quant,
                             valor: valor_total
                         }
-                        lista_de_pedidos.push(render_pedido)                        
+                        lista_de_pedidos.push(render_pedido)
                     }
                 }
             }
@@ -242,8 +242,11 @@ module.exports.pedidos_usuario = async function (app, req, res) {
 module.exports.pedidos = async function (app, req, res) {
     let tipo_user = req.session.id_tipo;
     if (tipo_user == 1) {
+        let rejeitados;
         let render_pedido;
+        let render_pedido_rejeitados;
         let lista_de_pedidos = []
+        let lista_de_pedidos_rejeitados = []
         let prod = [];
         const con = app.config.con_server;
         const model_pedido = new app.app.models.model_cart(con);
@@ -260,8 +263,20 @@ module.exports.pedidos = async function (app, req, res) {
         } else {
             for (let i = 0; i < pedidos.length; i++) {
                 let cart_pedido = await model_pedido.cart_pedido(pedidos[i].id);
-                if (cart_pedido.length <= 0) {
+                let nome;
+                let status;
+                let quant = 0;
+                let valor_total = 0;
+                for (let j = 0; cart_pedido.length > j; j++) {
+                    prod[j] = await model_pedido.unico_produto_cart(pedidos[i].id, cart_pedido[j].id_produto);
+                    nome = cart_pedido[j].nome
+                    status = cart_pedido[j].descr
+                    valor_total = (cart_pedido[j].quantidade * prod[j][0].preco)
+                    quant = quant + cart_pedido[j].quantidade
+                }
+                if (!prod || !status) {
                     render_pedido = {
+                        nome: "Erro ao carregar pedido",
                         id: "Erro ao carregar pedido",
                         status: "Erro ao carregar pedido",
                         quantidade: "Erro ao carregar pedido",
@@ -269,36 +284,54 @@ module.exports.pedidos = async function (app, req, res) {
                     }
                     lista_de_pedidos.push(render_pedido)
                 } else {
-                    let status;
-                    let quant = 0;
-                    let valor_total = 0;
-                    for (let j = 0; cart_pedido.length > j; j++) {
-                        prod[j] = await model_pedido.unico_produto_cart(pedidos[i].id, cart_pedido[j].id_produto);
-                        status = cart_pedido[j].descr
-                        valor_total = (cart_pedido[j].quantidade * prod[j][0].preco)
-                        quant = quant + cart_pedido[j].quantidade
+                    render_pedido = {
+                        nome: nome,
+                        id: pedidos[i].id,
+                        status: status,
+                        quantidade: quant,
+                        valor: valor_total
                     }
-                    if (!prod || !status) {
-                        render_pedido = {
-                            id: "Erro ao carregar pedido",
-                            status: "Erro ao carregar pedido",
-                            quantidade: "Erro ao carregar pedido",
-                            valor: "Erro ao carregar pedido"
-                        }
-                        lista_de_pedidos.push(render_pedido)
-                    }else{
-                        render_pedido = {
-                            id: pedidos[i].id,
-                            status: status,
-                            quantidade: quant,
-                            valor: valor_total
-                        }
-                        lista_de_pedidos.push(render_pedido)                        
-                    }
-
+                    lista_de_pedidos.push(render_pedido)
                 }
             }
-            res.render("admin/pedidos/pedidos", { pedidos: lista_de_pedidos })
+            for (let i = 0; i < pedidos.length; i++) {
+                let cart_pedido_rejeitados = await model_pedido.cart_pedido_rejeitado(pedidos[i].id);
+                let nome;
+                let status;
+                let quant = 0;
+                let valor_total = 0;
+                let status_prod;
+                for (let j = 0; cart_pedido_rejeitados.length > j; j++) {
+                    prod[j] = await model_pedido.unico_produto_cart_rejeitado(pedidos[i].id, cart_pedido_rejeitados[j].id_produto);
+                    nome = cart_pedido_rejeitados[j].nome
+                    status = cart_pedido_rejeitados[j].descr
+                    valor_total = (cart_pedido_rejeitados[j].quantidade * prod[j][0].preco)
+                    quant = quant + cart_pedido_rejeitados[j].quantidade
+                    status_prod = cart_pedido_rejeitados[j].status_prod
+                }
+                if (!prod || !status) {
+                    render_pedido_rejeitados = {
+                        nome: "Erro ao carregar pedido",
+                        id: "Erro ao carregar pedido",
+                        status: "Erro ao carregar pedido",
+                        quantidade: "Erro ao carregar pedido",
+                        valor: "Erro ao carregar pedido",
+                        status_prod: ""
+                    }
+                    lista_de_pedidos_rejeitados.push(render_pedido_rejeitados)
+                } else {
+                    render_pedido = {
+                        nome: nome,
+                        id: pedidos[i].id,
+                        status: status,
+                        quantidade: quant,
+                        valor: valor_total,
+                        status_prod: status_prod
+                    }
+                    lista_de_pedidos_rejeitados.push(render_pedido_rejeitados)
+                }
+            }
+            res.render("admin/pedidos/pedidos", { pedidos: lista_de_pedidos, pedidos_rejeitados: lista_de_pedidos_rejeitados })
             return;
         }
     } else {

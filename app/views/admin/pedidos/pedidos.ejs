@@ -9,11 +9,15 @@
     <h1>PEDIDOS</h1>
     <a href="/administrador">voltar</a>
     <main>
+        <div>
+            <h2>PEDIDOS ATIVOS</h2>
+        </div>
         <ul style="list-style:none">
         <div id="pedidos">
         <%for(let i=0;i<pedidos.length;i++){%>     
             <li>
                 <p>PEDIDO: <%= pedidos[i].id %></p>
+                <p>Nome do Cliente: <%= pedidos[i].nome %></p>
                 <p>Preço: R$ <%= pedidos[i].preco %></p>
                 <p>STATUS: <%= pedidos[i].status %></p>
                 <p>Quantidade: <%= pedidos[i].quantidade %></p>
@@ -44,6 +48,25 @@
         
         </div>
         </ul>
+        <div>
+            <h2>PEDIDOS DESCARTADOS</h2>
+        </div>
+        <ul style="list-style:none">
+            <div id="pedidos_rejeitado">
+            <%for(let i=0;i<pedidos_rejeitados.length;i++){%>     
+                <li>
+                    <p>PEDIDO: <%= pedidos[i].id %></p>
+                    <p>Nome do Cliente: <%= pedidos[i].nome %></p>
+                    <p>Preço: R$ <%= pedidos[i].preco %></p>
+                    <p>STATUS: <%= pedidos[i].status %></p>
+                    <p>Quantidade: <%= pedidos[i].quantidade %></p>
+                    <p>Valor total: R$<%= pedidos[i].valor %></p>
+                    <p>Status do produto: <%= pedidos[i].status %></p>
+                </li>
+            <% } %>
+            
+            </div>
+            </ul>
     </main>
     
 </body>
