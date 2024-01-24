@@ -50,6 +50,7 @@
                 <p>valor total: R$ <%= valor %> </p>
             </div>
             <form action="/listar_pedido" method="post">
+                <input type="hidden" name="valor" value="<%= valor %>">
                 <input type="hidden" value="sessao_pedido">
                 <input type="hidden" name="cart" value="1">
                 <button type="submit">FINALIZAR</button>

@@ -156,8 +156,8 @@ if(tipo_user == "1"){
     const model_admin = new app.app.models.model_admin(con);
     req.assert("nome", "Voce deve preencher o nome").notEmpty();
     req.assert("email", "Voce deve preencher o email").notEmpty();
-    req.assert("cnpj", "Voce deve preencher o senha").notEmpty();
-    req.assert("cnpj", "O campo senha deve conter maid de 8 digitos").len(11)
+    req.assert("cnpj", "Voce deve preencher o CNPJ").notEmpty();
+    req.assert("cnpj", "O campo CNPJ deve conter maid de 11 digitos").len(11)
     let desvio = req.validationErrors();
     if(desvio){
         res.render("admin/fornecedor/cadastrar_forn.ejs", {erro:desvio, fornecedor:dados});

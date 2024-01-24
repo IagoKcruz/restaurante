@@ -145,6 +145,7 @@ async function render_carrinho(req, res, app, cart_pedido, prod, valor_total, ca
 module.exports.finalizar = async function (app, req, res) {
     let tipo_user = req.session.id_tipo
     if (tipo_user == 2) {
+        let dados = req.body
         let prod = [];
         let user = req.session.id_usuario;
         const con = app.config.con_server;
@@ -156,7 +157,7 @@ module.exports.finalizar = async function (app, req, res) {
                 cart_pedido = [{ msg: "" }]
                 prod = [{ msg: "" }]
                 update_status = [{ msg: "Erro ao enviar pedido" }]
-                res.render("cardapio/finalizar.ejs", { pedido: cart_pedido, prod: prod, status: update_status[0] });
+                res.render("cardapio/finalizar.ejs", { pedido: cart_pedido, prod: prod, status: update_status[0], valor : dados.valor });
             } else {
                 let pedido_em_andamento = await model_pedido.pedido_em_andamento(user, pedido[0].id);
                 cart_pedido = await model_pedido.cart_pedido(pedido_em_andamento[0].id);
@@ -164,7 +165,7 @@ module.exports.finalizar = async function (app, req, res) {
                     prod[i] = await model_pedido.unico_produto_cart(pedido_em_andamento[0].id, cart_pedido[i].id_produto);
                 }
                 update_status = [{ msg: "Pedido enviado" }]
-                res.render("cardapio/finalizar.ejs", { pedido: cart_pedido, prod: prod, status: update_status[0] });
+                res.render("cardapio/finalizar.ejs", { pedido: cart_pedido, prod: prod, status: update_status[0], valor : dados.valor });
             }
         }
     } else {
@@ -274,17 +275,7 @@ module.exports.pedidos = async function (app, req, res) {
                     valor_total = (cart_pedido[j].quantidade * prod[j][0].preco)
                     quant = quant + cart_pedido[j].quantidade
                 }
-                if (!prod || !status) {
-                    render_pedido = {
-                        nome: "Erro ao carregar pedido",
-                        id: "Erro ao carregar pedido",
-                        status: "Erro ao carregar pedido",
-                        quantidade: "Erro ao carregar pedido",
-                        valor: "Erro ao carregar pedido"
-                    }
-                    lista_de_pedidos.push(render_pedido)
-                } else {
-                    render_pedido = {
+                        render_pedido = {
                         nome: nome,
                         id: pedidos[i].id,
                         status: status,
@@ -292,7 +283,7 @@ module.exports.pedidos = async function (app, req, res) {
                         valor: valor_total
                     }
                     lista_de_pedidos.push(render_pedido)
-                }
+                
             }
             for (let i = 0; i < pedidos.length; i++) {
                 let cart_pedido_rejeitados = await model_pedido.cart_pedido_rejeitado(pedidos[i].id);
@@ -309,17 +300,6 @@ module.exports.pedidos = async function (app, req, res) {
                     quant = quant + cart_pedido_rejeitados[j].quantidade
                     status_prod = cart_pedido_rejeitados[j].status_prod
                 }
-                if (!prod || !status) {
-                    render_pedido_rejeitados = {
-                        nome: "Erro ao carregar pedido",
-                        id: "Erro ao carregar pedido",
-                        status: "Erro ao carregar pedido",
-                        quantidade: "Erro ao carregar pedido",
-                        valor: "Erro ao carregar pedido",
-                        status_prod: ""
-                    }
-                    lista_de_pedidos_rejeitados.push(render_pedido_rejeitados)
-                } else {
                     render_pedido = {
                         nome: nome,
                         id: pedidos[i].id,
@@ -329,7 +309,7 @@ module.exports.pedidos = async function (app, req, res) {
                         status_prod: status_prod
                     }
                     lista_de_pedidos_rejeitados.push(render_pedido_rejeitados)
-                }
+                
             }
             res.render("admin/pedidos/pedidos", { pedidos: lista_de_pedidos, pedidos_rejeitados: lista_de_pedidos_rejeitados })
             return;

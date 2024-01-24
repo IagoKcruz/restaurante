@@ -19,7 +19,6 @@ admin.prototype.post_listar_usuario = function(id, callback){
     })
     
 }
-
 admin.prototype.cadastrar_user = function(dados, callback){    
     return new Promise((resolve, rejects)=>{
         dados.senha = this._crypto.createHash("md5").update(dados.senha).digest("hex");
